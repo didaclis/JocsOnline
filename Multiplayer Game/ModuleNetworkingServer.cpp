@@ -146,10 +146,11 @@ void ModuleNetworkingServer::onPacketReceived(const InputMemoryStream &packet, c
 					GameObject *gameObject = networkGameObjects[i];
 					
 					// TODO(you): World state replication lab session
-
-
+					proxy->repManagerServer.create(gameObject->networkId);
 				}
-
+				OutputMemoryStream packet;
+				proxy->repManagerServer.write(packet);
+				sendPacket(packet, fromAddress);
 				LOG("Message received: hello - from player %s", proxy->name.c_str());
 			}
 			else
