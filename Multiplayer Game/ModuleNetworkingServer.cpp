@@ -146,6 +146,8 @@ void ModuleNetworkingServer::onPacketReceived(const InputMemoryStream &packet, c
 					GameObject *gameObject = networkGameObjects[i];
 					
 					// TODO(you): World state replication lab session
+
+
 				}
 
 				LOG("Message received: hello - from player %s", proxy->name.c_str());
@@ -215,7 +217,8 @@ void ModuleNetworkingServer::onUpdate()
 			if (clientProxy.connected)
 			{
 				// TODO(you): UDP virtual connection lab session
-
+				if (secondsSincelastPingPacket > PING_INTERVAL_SECONDS)
+					disconnect();
 				// Don't let the client proxy point to a destroyed game object
 				if (!IsValid(clientProxy.gameObject))
 				{
@@ -227,9 +230,6 @@ void ModuleNetworkingServer::onUpdate()
 				// TODO(you): Reliability on top of UDP lab session
 			}
 		}
-
-		if (secondsSincelastPingPacket > PING_INTERVAL_SECONDS)
-			disconnect();
 	}
 }
 
