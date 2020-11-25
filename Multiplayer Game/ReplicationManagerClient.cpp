@@ -39,12 +39,12 @@ void ReplicationManagerClient::read(const InputMemoryStream& packet)
 				if (gameObject->sprite == nullptr)
 					continue;
 
-				int id;
-				packet >> id;
-				if (id == -1)
+				std::string name;
+				packet >> name;
+				if (strcmp(name.c_str(), " ") == 0)
 					gameObject->sprite->texture = nullptr;
 				else
-					gameObject->sprite->texture = App->modTextures->GetTextureById(id);
+					gameObject->sprite->texture = App->modTextures->GetTextureByName(name);
 			}
 		}
 		else

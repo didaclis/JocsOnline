@@ -1,3 +1,2 @@
 ﻿  UnityBuild.cpp
-D:\GithubRep\JocsOnline\Multiplayer Game\ModuleTextures.cpp(48,19): warning C4244: '=': conversión de 'double' a 'int32'; posible pérdida de datos
   Networks.vcxproj -> D:\GithubRep\JocsOnline\Multiplayer Game\x64\Debug\Networks.exe

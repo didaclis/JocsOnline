@@ -30,7 +30,7 @@ public:
 
 	void freeTexture(Texture *texture);
 
-	Texture* GetTextureById(int32 id);
+	Texture* GetTextureByName(std::string name);
 
 private:
 

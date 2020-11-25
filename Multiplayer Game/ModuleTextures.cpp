@@ -85,11 +85,11 @@ void ModuleTextures::freeTexture(Texture* tex)
 	}
 }
 
-Texture* ModuleTextures::GetTextureById(int32 id)
+Texture* ModuleTextures::GetTextureByName(std::string name)
 {
 	for (int i = 0; i < MAX_TEXTURES; ++i)
 	{
-		if (id == _textures[i].id)
+		if (strcmp(name.c_str(), _textures[i].filename) == 0)
 			return &_textures[i];
 	}
 	return nullptr;

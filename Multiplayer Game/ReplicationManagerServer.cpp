@@ -43,10 +43,14 @@ void ReplicationManagerServer::write(OutputMemoryStream& packet)
 			packet << gameObject->size.y;
 			if (gameObject->sprite != nullptr && gameObject->sprite->texture != nullptr)
 			{
-				packet << gameObject->sprite->texture->id;
+				std::string name = gameObject->sprite->texture->filename;
+				packet << name;
 			}
 			else
-				packet << -1;
+			{
+				std::string name = " ";
+				packet << name;
+			}
 		}
 		else if ((*iter).second == ReplicationAction::Update)
 		{
