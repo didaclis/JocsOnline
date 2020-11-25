@@ -1,4 +1,5 @@
 #include "Networks.h"
+#include "ModuleTextures.h"
 
 
 extern ID3D11Device *g_pd3dDevice;
@@ -44,6 +45,9 @@ Texture* ModuleTextures::loadTexture(const char *filename)
 		texture.size = vec2{ (float)width, (float)height };
 		texture.used = true;
 	}
+	texture.id = numOfTextures;
+
+	++numOfTextures;
 
 	return &texture;
 }
@@ -57,6 +61,7 @@ Texture * ModuleTextures::loadTexture(void * pixels, int width, int height)
 	texture.shaderResource = shaderResource;
 	texture.filename = "";
 	texture.size = vec2{ (float)width, (float)height };
+
 	texture.used = true;
 	return &texture;
 }
@@ -78,6 +83,16 @@ void ModuleTextures::freeTexture(Texture* tex)
 			}
 		}
 	}
+}
+
+Texture* ModuleTextures::GetTextureById(int32 id)
+{
+	for (int i = 0; i < MAX_TEXTURES; ++i)
+	{
+		if (id == _textures[i].id)
+			return &_textures[i];
+	}
+	return nullptr;
 }
 
 ID3D11ShaderResourceView* ModuleTextures::loadD3DTextureFromFile(const char * filename, int * width, int * height)

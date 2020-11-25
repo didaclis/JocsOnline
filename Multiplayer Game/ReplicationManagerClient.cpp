@@ -27,6 +27,25 @@ void ReplicationManagerClient::read(const InputMemoryStream& packet)
 			packet >> gameObject->position.x;
 			packet >> gameObject->position.y;
 			packet >> gameObject->angle;
+			if (repAction == ReplicationAction::Create)
+			{
+				//object size
+				packet >> gameObject->size.x;
+				packet >> gameObject->size.y;
+
+				//sprite
+				gameObject->sprite = App->modRender->addSprite(gameObject);
+
+				if (gameObject->sprite == nullptr)
+					continue;
+
+				int id;
+				packet >> id;
+				if (id == -1)
+					gameObject->sprite->texture = nullptr;
+				else
+					gameObject->sprite->texture = App->modTextures->GetTextureById(id);
+			}
 		}
 		else
 		{

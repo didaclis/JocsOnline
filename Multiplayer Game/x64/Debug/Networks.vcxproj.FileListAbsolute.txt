@@ -1,2 +1,4 @@
 C:\Users\Isabel\Desktop\Uni\Xarxes i jocs online\Lab5\Multiplayer Game\x64\Debug\Networks.exe
 C:\Users\Isabel\Desktop\Uni\Xarxes i jocs online\Lab5\Multiplayer Game\x64\Debug\Networks.pdb
+D:\GithubRep\JocsOnline\Multiplayer Game\x64\Debug\Networks.exe
+D:\GithubRep\JocsOnline\Multiplayer Game\x64\Debug\Networks.pdb

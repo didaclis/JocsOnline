@@ -8,6 +8,7 @@ struct Texture
 	const char *filename = "";
 	vec2 size = vec2{ -1.0f };
 	bool used = false;
+	int32 id = -1;
 };
 
 class ModuleTextures : public Module
@@ -29,6 +30,7 @@ public:
 
 	void freeTexture(Texture *texture);
 
+	Texture* GetTextureById(int32 id);
 
 private:
 
@@ -39,4 +41,7 @@ private:
 	Texture & getTextureSlotForFilename(const char *filename);
 
 	Texture _textures[MAX_TEXTURES];
+
+private:
+	 int numOfTextures = 0;
 };

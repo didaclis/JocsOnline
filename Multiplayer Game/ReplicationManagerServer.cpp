@@ -27,23 +27,32 @@ void ReplicationManagerServer::write(OutputMemoryStream& packet)
 		packet << (*iter).first;
 		packet << (*iter).second;
 		GameObject* gameObject = App->modLinkingContext->getNetworkGameObject((*iter).first);
-		if ((*iter).second == ReplicationAction::Create)
-		{
-			packet << gameObject->position.x;
-			packet << gameObject->position.y;
-			packet << gameObject->angle;
-		}
-		else if ((*iter).second == ReplicationAction::Update)
-		{
-			packet << gameObject->position.x;
-			packet << gameObject->position.y;
-			packet << gameObject->angle;
-		}
-		else if ((*iter).second == ReplicationAction::Destroy)
+		if ((*iter).second == ReplicationAction::Destroy)
 		{
 			commands.erase(iter);
 			continue;
 		}
+
+		packet << gameObject->position.x;
+		packet << gameObject->position.y;
+		packet << gameObject->angle;
+
+		if ((*iter).second == ReplicationAction::Create)
+		{
+			packet << gameObject->size.x;
+			packet << gameObject->size.y;
+			if (gameObject->sprite != nullptr && gameObject->sprite->texture != nullptr)
+			{
+				packet << gameObject->sprite->texture->id;
+			}
+			else
+				packet << -1;
+		}
+		else if ((*iter).second == ReplicationAction::Update)
+		{
+
+		}
+		
 		(*iter).second = ReplicationAction::None;
 	}
 	
