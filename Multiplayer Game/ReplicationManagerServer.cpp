@@ -27,9 +27,14 @@ void ReplicationManagerServer::write(OutputMemoryStream& packet)
 		packet << (*iter).first;
 		packet << (*iter).second;
 		GameObject* gameObject = App->modLinkingContext->getNetworkGameObject((*iter).first);
+		
+		if ((*iter).second == ReplicationAction::None)
+			continue;
+
 		if ((*iter).second == ReplicationAction::Destroy)
 		{
 			commands.erase(iter);
+			(*iter).second = ReplicationAction::None;
 			continue;
 		}
 

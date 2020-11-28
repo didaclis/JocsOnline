@@ -10,9 +10,13 @@ void ReplicationManagerClient::read(const InputMemoryStream& packet)
 	{
 		uint32 netId;
 		packet >> netId;
-		
+
 		ReplicationAction repAction;
 		packet >> repAction;
+
+		if (repAction == ReplicationAction::None)
+			continue;
+
 		if (repAction != ReplicationAction::Destroy)
 		{
 			if (repAction == ReplicationAction::Create)

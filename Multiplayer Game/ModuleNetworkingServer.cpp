@@ -151,6 +151,7 @@ void ModuleNetworkingServer::onPacketReceived(const InputMemoryStream &packet, c
 				OutputMemoryStream packet;
 				proxy->repManagerServer.write(packet);
 				sendPacket(packet, fromAddress);
+
 				LOG("Message received: hello - from player %s", proxy->name.c_str());
 			}
 			else
@@ -227,7 +228,9 @@ void ModuleNetworkingServer::onUpdate()
 				}
 
 				// TODO(you): World state replication lab session
-
+				OutputMemoryStream packet;
+				clientProxy.repManagerServer.write(packet);
+				sendPacket(packet, clientProxy.address);
 				// TODO(you): Reliability on top of UDP lab session
 			}
 		}
@@ -368,6 +371,7 @@ GameObject * ModuleNetworkingServer::instantiateNetworkObject()
 	{
 		if (clientProxies[i].connected)
 		{
+			clientProxies[i].repManagerServer.create(gameObject->networkId);
 			// TODO(you): World state replication lab session
 		}
 	}
