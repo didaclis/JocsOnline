@@ -22,19 +22,21 @@ void ReplicationManagerServer::write(OutputMemoryStream& packet)
 	packet << PROTOCOL_ID;
 	packet << ClientMessage::Input;
 	packet << commands.size();
-	for (auto iter = commands.begin(); iter != commands.end(); ++iter)
+	for (auto iter = commands.begin(); iter != commands.end();)
 	{
 		packet << (*iter).first;
 		packet << (*iter).second;
 		GameObject* gameObject = App->modLinkingContext->getNetworkGameObject((*iter).first);
 		
 		if ((*iter).second == ReplicationAction::None)
+		{
+			++iter;
 			continue;
-
+		}
 		if ((*iter).second == ReplicationAction::Destroy)
 		{
-			commands.erase(iter);
-			break;
+			iter = commands.erase(iter);
+			continue;
 		}
 
 		packet << gameObject->position.x;
@@ -43,7 +45,10 @@ void ReplicationManagerServer::write(OutputMemoryStream& packet)
 
 		if ((*iter).second == ReplicationAction::Create)
 		{
-			packet << (int)gameObject->behaviour->type();
+			if (gameObject->behaviour != nullptr)
+				packet << (int)gameObject->behaviour->type();
+			else
+				packet << 0;
 			packet << gameObject->size.x;
 			packet << gameObject->size.y;
 			if (gameObject->sprite != nullptr && gameObject->sprite->texture != nullptr)
@@ -56,13 +61,10 @@ void ReplicationManagerServer::write(OutputMemoryStream& packet)
 				std::string name = " ";
 				packet << name;
 			}
-		}
-		else if ((*iter).second == ReplicationAction::Update)
-		{
-
-		}
-		
+		}		
 		(*iter).second = ReplicationAction::None;
+		++iter;
+
 	}
 	
 }
