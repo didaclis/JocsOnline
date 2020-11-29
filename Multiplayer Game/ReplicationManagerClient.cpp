@@ -28,11 +28,18 @@ void ReplicationManagerClient::read(const InputMemoryStream& packet)
 			{
 				gameObject = App->modLinkingContext->getNetworkGameObject(netId);
 			}
+
 			packet >> gameObject->position.x;
 			packet >> gameObject->position.y;
 			packet >> gameObject->angle;
+			
 			if (repAction == ReplicationAction::Create)
 			{
+				int bType;
+				packet >> bType;
+
+				gameObject->behaviour = App->modBehaviour->addBehaviour((BehaviourType)bType, gameObject);
+
 				//object size
 				packet >> gameObject->size.x;
 				packet >> gameObject->size.y;
@@ -54,7 +61,8 @@ void ReplicationManagerClient::read(const InputMemoryStream& packet)
 		else
 		{
 			gameObject = App->modLinkingContext->getNetworkGameObject(netId);
-			
+			App->modLinkingContext->unregisterNetworkGameObject(gameObject);
+			Destroy(gameObject);
 		}
 	}
 }

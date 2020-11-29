@@ -34,8 +34,7 @@ void ReplicationManagerServer::write(OutputMemoryStream& packet)
 		if ((*iter).second == ReplicationAction::Destroy)
 		{
 			commands.erase(iter);
-			(*iter).second = ReplicationAction::None;
-			continue;
+			break;
 		}
 
 		packet << gameObject->position.x;
@@ -44,6 +43,7 @@ void ReplicationManagerServer::write(OutputMemoryStream& packet)
 
 		if ((*iter).second == ReplicationAction::Create)
 		{
+			packet << (int)gameObject->behaviour->type();
 			packet << gameObject->size.x;
 			packet << gameObject->size.y;
 			if (gameObject->sprite != nullptr && gameObject->sprite->texture != nullptr)
