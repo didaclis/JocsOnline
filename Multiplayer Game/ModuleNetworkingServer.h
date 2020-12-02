@@ -53,7 +53,6 @@ private:
 		// TODO(you): UDP virtual connection lab session
 		ReplicationManagerServer repManagerServer;
 		// TODO(you): Reliability on top of UDP lab session
-
 		uint32 nextExpectedInputSequenceNumber = 0;
 		InputController gamepad;
 	};

@@ -140,6 +140,10 @@ void ModuleNetworkingClient::onPacketReceived(const InputMemoryStream &packet, c
 			repManagerClient.read(packet);
 			break;
 			}
+		case ClientMessage::InputNumber: {
+			packet >> inputDataFront;
+			break;
+			}
 		}
 		// TODO(you): Reliability on top of UDP lab session
 	}
@@ -224,8 +228,6 @@ void ModuleNetworkingClient::onUpdate()
 			}
 
 			// Clear the queue
-			inputDataFront = inputDataBack;
-
 			sendPacket(packet, serverAddress);
 		}
 

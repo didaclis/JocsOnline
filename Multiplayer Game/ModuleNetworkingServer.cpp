@@ -190,6 +190,13 @@ void ModuleNetworkingServer::onPacketReceived(const InputMemoryStream &packet, c
 					}
 				}
 			}
+
+			//send last sequence number recived
+			OutputMemoryStream inputNumberPacket;
+			inputNumberPacket << PROTOCOL_ID;
+			inputNumberPacket << ClientMessage::InputNumber;
+			inputNumberPacket << proxy->nextExpectedInputSequenceNumber;
+			sendPacket(inputNumberPacket, fromAddress);
 		}
 
 		// TODO(you): UDP virtual connection lab session
