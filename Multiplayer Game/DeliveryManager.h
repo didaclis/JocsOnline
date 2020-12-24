@@ -1,6 +1,8 @@
 #pragma once
 #include<list>
 
+struct Delivery;
+
 class DeliveryManager
 {
 public:

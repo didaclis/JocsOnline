@@ -5,8 +5,8 @@
 
 Delivery* DeliveryManager::writeSequenceNumber(OutputMemoryStream& packet)
 {
-    Delivery* newDelivery; 
-    newDelivery->sequenceNumber = nextSeqNum++;
+    Delivery* newDelivery = new Delivery(); 
+   newDelivery->sequenceNumber = nextSeqNum++;
     newDelivery->dispatchTime = Time.time;
 
     packet << newDelivery->sequenceNumber;
@@ -44,7 +44,7 @@ void DeliveryManager::writeSequenceNumbersPendingAck(OutputMemoryStream& packet)
     packet << ClientMessage::ConfirmPackets;
     packet << pendingAckNum.size();
     for (std::list<uint32>::iterator iter = pendingAckNum.begin(); iter != pendingAckNum.end(); ++iter)
-        packet << iter;
+        packet << *iter;
 }
 
 void DeliveryManager::processAckdSequenceNumbers(const InputMemoryStream& packet)
