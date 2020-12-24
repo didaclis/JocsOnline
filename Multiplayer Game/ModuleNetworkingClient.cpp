@@ -138,6 +138,12 @@ void ModuleNetworkingClient::onPacketReceived(const InputMemoryStream &packet, c
 		{
 		case ClientMessage::Input: {
 			repManagerClient.read(packet);
+
+			OutputMemoryStream confirmPacket;
+			confirmPacket << PROTOCOL_ID;
+			confirmPacket << ClientMessage::ConfirmPackets;
+			repManagerClient.createConformPacket(confirmPacket);
+			sendPacket(confirmPacket, serverAddress);
 			break;
 			}
 		case ClientMessage::InputNumber: {

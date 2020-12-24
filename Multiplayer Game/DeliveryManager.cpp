@@ -5,17 +5,19 @@
 
 Delivery* DeliveryManager::writeSequenceNumber(OutputMemoryStream& packet)
 {
-    Delivery* newDelivery; 
-    newDelivery->sequenceNumber = nextSeqNum++;
+    nextSeqNum++;
+    Delivery* newDelivery = new Delivery; 
+    newDelivery->sequenceNumber = nextSeqNum;
     newDelivery->dispatchTime = Time.time;
 
     packet << newDelivery->sequenceNumber;
 
-    pendingDeliv.push_back(newDelivery);
+    pendingDeliv.emplace(newDelivery,packet);
 
     return newDelivery;
 }
 
+//client
 bool DeliveryManager::processSequenceNumber(const InputMemoryStream& packet)
 {
     //mirar que el numero de sequencia sigui el correcte i si no a pendre per el cul el packet
@@ -23,11 +25,13 @@ bool DeliveryManager::processSequenceNumber(const InputMemoryStream& packet)
     uint32 seqNumber;
     packet >> seqNumber;
 
-    if(expectedSeqNum != seqNumber)
+    if (expectedSeqNum != seqNumber)
+    {
         return false;
+    }
 
+    ++expectedSeqNum;
     pendingAckNum.push_back(seqNumber);
-
     return true;
     
 }
@@ -38,15 +42,18 @@ bool DeliveryManager::hasSequenceNumbersPendingAck() const
     return !pendingAckNum.empty();
 }
 
+//client
 void DeliveryManager::writeSequenceNumbersPendingAck(OutputMemoryStream& packet)
 {
     //enviar packet amb tots els sequence numbers dels packets rebuts.
-    packet << ClientMessage::ConfirmPackets;
     packet << pendingAckNum.size();
     for (std::list<uint32>::iterator iter = pendingAckNum.begin(); iter != pendingAckNum.end(); ++iter)
-        packet << iter;
+        packet << *iter;
+    pendingAckNum.clear();
+
 }
 
+//server
 void DeliveryManager::processAckdSequenceNumbers(const InputMemoryStream& packet)
 {
    //per cada seq. number trobes el paquet i crides la seva funcio de succes o failure.
@@ -59,46 +66,60 @@ void DeliveryManager::processAckdSequenceNumbers(const InputMemoryStream& packet
     {
         uint32 seqNum;
         packet >> seqNum;
-        for (std::list<Delivery*>::iterator iter = pendingDeliv.begin(); iter != pendingDeliv.end(); ++iter)
+        for (std::map<Delivery*,OutputMemoryStream>::iterator iter = pendingDeliv.begin(); iter != pendingDeliv.end(); ++iter)
         {
-            if (seqNum == (*iter)->sequenceNumber)
+            if (seqNum == (*iter).first->sequenceNumber)
             {
-                (*iter)->delegate->onDeliverySuccess(this);
+                (*iter).first->delegate->onDeliverySuccess(this);
                 pendingDeliv.erase(iter);
                 break;
             }
         }
-        --size;
     }
 
-    for (std::list<Delivery*>::iterator iter = pendingDeliv.begin(); iter != pendingDeliv.end(); )
+    for (std::map<Delivery*, OutputMemoryStream>::iterator iter = pendingDeliv.begin(); iter != pendingDeliv.end(); )
     {
-        if (actualSeqNum < (*iter)->sequenceNumber)
+        if (actualSeqNum < (*iter).first->sequenceNumber)
             break;
 
-        (*iter)->delegate->onDeliveryFailure(this);
-        iter = pendingDeliv.erase(iter);
+        (*iter).first->delegate->onDeliveryFailure(this);
+        //iter = pendingDeliv.erase(iter);
+        ++iter;
     }
 }
 
+//server
 void DeliveryManager::processTimedOutPackets()
 {
     uint32 actualSeqNum = nextSeqNum;
 
     //crides a la failure
-    for (std::list<Delivery*>::iterator iter = pendingDeliv.begin(); iter != pendingDeliv.end();)
+    for (std::map<Delivery*, OutputMemoryStream>::iterator iter = pendingDeliv.begin(); iter != pendingDeliv.end();)
     {
-        if (actualSeqNum < (*iter)->sequenceNumber)
+        if (actualSeqNum < (*iter).first->sequenceNumber)
             break;
 
-        if (Time.time > PACKET_DELIVERY_TIMEOUT_SECONDS + (*iter)->dispatchTime)
+        if (Time.time > PACKET_DELIVERY_TIMEOUT_SECONDS + (*iter).first->dispatchTime)
         {
-            (*iter)->delegate->onDeliveryFailure(this);
-            iter = pendingDeliv.erase(iter);
+            (*iter).first->delegate->onDeliveryFailure(this);
+            //iter = pendingDeliv.erase(iter);
         }
-        else
+        //else
             ++iter;
     }
+}
+
+void DeliveryManager::GetPendingPackets(std::vector<OutputMemoryStream>& p)
+{
+    for (std::map<Delivery*, OutputMemoryStream>::iterator iter = pendingDeliv.begin(); iter != pendingDeliv.end();++iter)
+    {
+        p.push_back((*iter).second);
+    }
+}
+
+void DeliveryManager::SavePacket(Delivery* deliv, const OutputMemoryStream& packet)
+{
+    pendingDeliv[deliv] = packet;
 }
 
 void DeliveryManager::Clear()

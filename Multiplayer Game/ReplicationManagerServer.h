@@ -13,4 +13,6 @@ public:
 
 public:
 	std::map<uint32, ReplicationAction> commands;
+	DeliveryManager deliv;
+
 };

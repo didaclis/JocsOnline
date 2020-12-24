@@ -198,6 +198,11 @@ void ModuleNetworkingServer::onPacketReceived(const InputMemoryStream &packet, c
 			inputNumberPacket << proxy->nextExpectedInputSequenceNumber;
 			sendPacket(inputNumberPacket, fromAddress);
 		}
+		else if (message == ClientMessage::ConfirmPackets)
+		{
+			//TODO: OnSucces
+			proxy->repManagerServer.deliv.processAckdSequenceNumbers(packet);
+		}
 
 		// TODO(you): UDP virtual connection lab session
 	}
@@ -237,8 +242,12 @@ void ModuleNetworkingServer::onUpdate()
 				// TODO(you): World state replication lab session
 				OutputMemoryStream packet;
 				clientProxy.repManagerServer.write(packet);
-				sendPacket(packet, clientProxy.address);
 				// TODO(you): Reliability on top of UDP lab session
+				std::vector<OutputMemoryStream> pendingPackets;
+				clientProxy.repManagerServer.deliv.GetPendingPackets(pendingPackets);
+				for(OutputMemoryStream& p : pendingPackets)
+					sendPacket(p, clientProxy.address);
+
 			}
 		}
 	}

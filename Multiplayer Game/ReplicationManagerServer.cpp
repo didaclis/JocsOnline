@@ -20,7 +20,11 @@ void ReplicationManagerServer::destroy(uint32 networkId)
 void ReplicationManagerServer::write(OutputMemoryStream& packet)
 {
 	packet << PROTOCOL_ID;
-	packet << ClientMessage::Input;
+	packet << ClientMessage::Input; 
+
+	Delivery* delivery = deliv.writeSequenceNumber(packet);
+	delivery->delegate = new DeliveryServer();
+
 	packet << commands.size();
 	for (auto iter = commands.begin(); iter != commands.end();)
 	{
@@ -30,11 +34,13 @@ void ReplicationManagerServer::write(OutputMemoryStream& packet)
 		
 		if ((*iter).second == ReplicationAction::None)
 		{
+			deliv.SavePacket(delivery, packet);
 			++iter;
 			continue;
 		}
 		if ((*iter).second == ReplicationAction::Destroy)
 		{
+			deliv.SavePacket(delivery, packet);
 			iter = commands.erase(iter);
 			continue;
 		}
@@ -63,6 +69,7 @@ void ReplicationManagerServer::write(OutputMemoryStream& packet)
 			}
 		}		
 		(*iter).second = ReplicationAction::None;
+		deliv.SavePacket(delivery, packet);
 		++iter;
 
 	}

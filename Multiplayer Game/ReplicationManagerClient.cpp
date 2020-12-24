@@ -3,6 +3,10 @@
 
 void ReplicationManagerClient::read(const InputMemoryStream& packet)
 {
+	if (!deliv.processSequenceNumber(packet))
+	{
+		return;
+	}
 	GameObject* gameObject = nullptr;
 	size_t obj_size;
 	packet >> obj_size;
@@ -65,4 +69,9 @@ void ReplicationManagerClient::read(const InputMemoryStream& packet)
 			Destroy(gameObject);
 		}
 	}
+}
+
+void ReplicationManagerClient::createConformPacket(OutputMemoryStream& packet)
+{
+	deliv.writeSequenceNumbersPendingAck(packet);
 }
