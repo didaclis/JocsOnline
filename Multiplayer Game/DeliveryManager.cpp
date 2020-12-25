@@ -26,6 +26,7 @@ bool DeliveryManager::processSequenceNumber(const InputMemoryStream& packet)
     if(expectedSeqNum != seqNumber)
         return false;
 
+    expectedSeqNum++;
     pendingAckNum.push_back(seqNumber);
 
     return true;
@@ -65,6 +66,8 @@ void DeliveryManager::processAckdSequenceNumbers(const InputMemoryStream& packet
             {
                 (*iter)->delegate->onDeliverySuccess(this);
                 pendingDeliv.erase(iter);
+                delete[] * iter;
+                *iter == nullptr;
                 break;
             }
         }
@@ -103,6 +106,13 @@ void DeliveryManager::processTimedOutPackets()
 
 void DeliveryManager::Clear()
 {
+    for (std::list<Delivery*>::iterator iter = pendingDeliv.begin(); iter != pendingDeliv.end();)
+    {
+        delete[] * iter;
+        *iter == nullptr;
+    }
+    pendingDeliv.clear();
+    pendingAckNum.clear();
 }
 
 void DeliveryClient::onDeliverySuccess(DeliveryManager* deliveryManager)

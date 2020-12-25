@@ -24,7 +24,7 @@ private:
 	uint32 nextSeqNum = 0;
 	std::list<Delivery*> pendingDeliv;
 
-	uint32 expectedSeqNum = 1;
+	uint32 expectedSeqNum = 0;
 	std::list<uint32> pendingAckNum;
 
 };
@@ -47,13 +47,13 @@ struct Delivery
 class DeliveryClient : public DeliveryDelegate
 {
 public:
-	void onDeliverySuccess(DeliveryManager* deliveryManager);
-	void onDeliveryFailure(DeliveryManager* deliveryManager);
+	void onDeliverySuccess(DeliveryManager* deliveryManager) override;
+	void onDeliveryFailure(DeliveryManager* deliveryManager) override;
 };
 
 class DeliveryServer : public DeliveryDelegate
 {
 public:
-	void onDeliverySuccess(DeliveryManager* deliveryManager);
-	void onDeliveryFailure(DeliveryManager* deliveryManager);
+	void onDeliverySuccess(DeliveryManager* deliveryManager) override;
+	void onDeliveryFailure(DeliveryManager* deliveryManager) override;
 };
