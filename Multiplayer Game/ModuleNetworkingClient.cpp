@@ -137,8 +137,13 @@ void ModuleNetworkingClient::onPacketReceived(const InputMemoryStream &packet, c
 		switch (messg)
 		{
 		case ClientMessage::Input: {
-			if(devManager.processSequenceNumber(packet))
+			
+			if (devManager.processSequenceNumber(packet))
 				repManagerClient.read(packet);
+
+			OutputMemoryStream newPacket;
+			devManager.writeSequenceNumbersPendingAck(newPacket);
+			sendPacket(newPacket, serverAddress);
 			break;
 			}
 		case ClientMessage::InputNumber: {
@@ -200,7 +205,7 @@ void ModuleNetworkingClient::onUpdate()
 			OutputMemoryStream ping_paket;
 			ping_paket << PROTOCOL_ID;
 			ping_paket << ClientMessage::Ping;
-			//sendPacket(ping_paket, serverAddress);
+			sendPacket(ping_paket, serverAddress);
 		}
 
 		if (secondsSinceLastInputDelivery >= PING_INTERVAL_SECONDS)
@@ -230,6 +235,8 @@ void ModuleNetworkingClient::onUpdate()
 			}
 			// Clear the queue
 			sendPacket(packet, serverAddress);
+
+			//devManager.processTimedOutPackets();
 		}
 
 		// TODO(you): Latency management lab session

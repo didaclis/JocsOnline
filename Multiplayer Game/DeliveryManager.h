@@ -17,15 +17,17 @@ public:
 	void processAckdSequenceNumbers(const InputMemoryStream& packet);
 	void processTimedOutPackets();
 
+	void getAllPackets(std::list<OutputMemoryStream>& packets);
+
 	void Clear();
 
 private:
 
-	uint32 nextSeqNum = 0;
+	int nextSeqNum = 0;
 	std::list<Delivery*> pendingDeliv;
 
-	uint32 expectedSeqNum = 0;
-	std::list<uint32> pendingAckNum;
+	int expectedSeqNum = 0;
+	std::list<int> pendingAckNum;
 
 };
 
@@ -41,19 +43,6 @@ struct Delivery
 {
 	uint32 sequenceNumber = 0;
 	double dispatchTime = 0.0;
-	DeliveryDelegate* delegate = nullptr;
+	OutputMemoryStream savedPacket;
 };
 
-class DeliveryClient : public DeliveryDelegate
-{
-public:
-	void onDeliverySuccess(DeliveryManager* deliveryManager) override;
-	void onDeliveryFailure(DeliveryManager* deliveryManager) override;
-};
-
-class DeliveryServer : public DeliveryDelegate
-{
-public:
-	void onDeliverySuccess(DeliveryManager* deliveryManager) override;
-	void onDeliveryFailure(DeliveryManager* deliveryManager) override;
-};

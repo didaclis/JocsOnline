@@ -281,7 +281,7 @@ void ModuleNetworking::processIncomingPackets()
 			if (readByteCount == 0)
 			{
 				// Graceful disconnection from remote socket
-				onConnectionReset(fromAddress);
+				//onConnectionReset(fromAddress);
 			}
 			else if (error == WSAEWOULDBLOCK)
 			{
