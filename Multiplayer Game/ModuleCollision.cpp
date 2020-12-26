@@ -151,6 +151,17 @@ bool ModuleCollision::update()
 						c2.behaviour->onCollisionTriggered(*c2.collider, *c1.collider);
 					}
 				}
+				else
+				{
+					if (c1.behaviour)
+					{
+						c1.behaviour->onNotCollisionTriggered(*c1.collider, *c2.collider);
+					}
+					if (c2.behaviour)
+					{
+						c2.behaviour->onNotCollisionTriggered(*c2.collider, *c1.collider);
+					}
+				}
 			}
 		}
 	}

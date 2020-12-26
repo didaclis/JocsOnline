@@ -346,17 +346,25 @@ bool ModuleNetworkingServer::areMoreThanOne()
 
 void ModuleNetworkingServer::manageGame()
 {
-
+	if (beginSquare == false)
+	{
+		spawnSquareOfDeath();
+		beginSquare = true;
+	}
 	
-	if (Time.time - lastPowerUpTime > nextPowerUpTime)
+	if (Time.time - lastPowerUpTime > nextPowerUpTime) //PowerUps Management
 	{
 		lastPowerUpTime = Time.time;
-		nextPowerUpTime = 10 * Random.next();
+		nextPowerUpTime = 5 + 15 * Random.next();
 		int t = (int)3 * Random.next();
 		PowerUp::PowerUpType type = (PowerUp::PowerUpType)t;
 		spawnPowerUp(vec2{ 0,0 }, 90, type);
 	}
-	//spawnAsteroid(vec2{ 0,0 }, 90);
+	//if (Time.time - lastAsteroidTime > nextAsteroidTime)//Asteroids Management
+	//{
+	//	lastAsteroidTime = Time.time;
+	//	nextAsteroidTime = 5 + 15 * Random.next();
+	//}
 }
 
 GameObject * ModuleNetworkingServer::spawnPlayer(uint8 spaceshipType, vec2 initialPosition, float initialAngle)
@@ -421,10 +429,25 @@ GameObject* ModuleNetworkingServer::spawnPowerUp(vec2 initialPosition, float ini
 	return powerup;
 }
 
-GameObject* ModuleNetworkingServer::spawnAsteroid(vec2 initialPosition, float initialAngle)
+GameObject* ModuleNetworkingServer::spawnAsteroid(float initialAngle, Asteroid::AsteroidType type)
 {
 	GameObject* gameObject = NetworkInstantiate();
-	gameObject->position = initialPosition;
+	//switch (type)
+	//{
+	//case Asteroid::AsteroidType::NORTH:
+	//	gameObject->position = ;
+	//	break;
+	//case Asteroid::AsteroidType::SOUTH:
+	//	gameObject->position = ;
+	//	break;
+	//case Asteroid::AsteroidType::EAST:
+	//	gameObject->position = ;
+	//	break;
+	//case Asteroid::AsteroidType::WEST:
+	//	gameObject->position = ;
+	//	break;
+	//}
+	
 	gameObject->angle = initialAngle;
 	gameObject->size = { 100,100 };
 	// Create sprite
@@ -438,6 +461,26 @@ GameObject* ModuleNetworkingServer::spawnAsteroid(vec2 initialPosition, float in
 	// Create behaviour
 	Asteroid* asteroidBehaviour = App->modBehaviour->addAsteroid(gameObject);
 	gameObject->behaviour = asteroidBehaviour;
+	gameObject->behaviour->isServer = true;
+
+	return gameObject;
+}
+
+GameObject* ModuleNetworkingServer::spawnSquareOfDeath()
+{
+	GameObject* gameObject = NetworkInstantiate();
+	gameObject->angle = 0;
+	// Create sprite
+	gameObject->sprite = App->modRender->addSprite(gameObject);
+	gameObject->sprite->order = 10;
+	gameObject->sprite->texture = App->modResources->squareOfDeath;
+	gameObject->size = vec2{ 2048,2048 };
+	// Create collider
+	gameObject->collider = App->modCollision->addCollider(ColliderType::SquareOfDeath, gameObject);
+	//gameObject->collider->isTrigger = true;
+	// Create behaviour
+	SquareOfDeath* squareBehaviour = App->modBehaviour->addSquareOfDeath(gameObject);
+	gameObject->behaviour = squareBehaviour;
 	gameObject->behaviour->isServer = true;
 
 	return gameObject;

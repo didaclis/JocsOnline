@@ -117,6 +117,7 @@ void Spaceship::destroy()
 
 void Spaceship::onCollisionTriggered(Collider &c1, Collider &c2)
 {
+
 	if (c2.type == ColliderType::Laser && c2.gameObject->tag != gameObject->tag)
 	{
 		if (isServer)
@@ -168,6 +169,7 @@ void Spaceship::onCollisionTriggered(Collider &c1, Collider &c2)
 			dynamic_cast<PowerUp*>(c2.gameObject->behaviour)->managePowerUp(gameObject);
 		}
 	}
+
 	if (c2.type == ColliderType::Asteroid && c2.gameObject->tag != gameObject->tag)
 	{
 		if (isServer)
@@ -212,6 +214,18 @@ void Spaceship::onCollisionTriggered(Collider &c1, Collider &c2)
 	}
 }
 
+void Spaceship::onNotCollisionTriggered(Collider& c1, Collider& c2)
+{
+	if (c2.type == ColliderType::SquareOfDeath)
+	{
+		hitPoints -= 0.1;
+		if (hitPoints <= 0)
+		{
+			NetworkDestroy(gameObject);
+		}
+	}
+}
+
 
 void Spaceship::write(OutputMemoryStream & packet)
 {
@@ -242,7 +256,7 @@ void PowerUp::update()
 			}
 		}
 	}
-	
+	gameObject->size += vec2{ 0.1, 0.1 };
 }
 
 void PowerUp::destroy()
@@ -287,4 +301,13 @@ void Asteroid::onCollisionTriggered(Collider& c1, Collider& c2)
 			NetworkDestroy(gameObject); // Destroy the laser
 		}
 	}
+}
+
+void SquareOfDeath::start()
+{
+}
+
+void SquareOfDeath::update()
+{
+	gameObject->size -= vec2{ 0.1,0.1 };
 }

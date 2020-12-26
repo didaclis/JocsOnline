@@ -80,7 +80,9 @@ public:
 	//////////////////////////////////////////////////////////////////////
 	float lastPowerUpTime = 0.f;
 	int nextPowerUpTime = 5;
-
+	float lastAsteroidTime = 0.f;
+	int nextAsteroidTime = 5;
+	bool beginSquare = false;
 	//////////////////////////////////////////////////////////////////////
 	// Spawning network objects
 	//////////////////////////////////////////////////////////////////////
@@ -89,7 +91,9 @@ public:
 
 	GameObject* spawnPowerUp(vec2 initialPosition, float initialAngle, PowerUp::PowerUpType type);
 
-	GameObject* spawnAsteroid(vec2 initialPosition, float initialAngle);
+	GameObject* spawnAsteroid(float initialAngle, Asteroid::AsteroidType type);
+	
+	GameObject* spawnSquareOfDeath();
 
 private:
 

@@ -13,7 +13,7 @@ public:
 	Laser     * addLaser(GameObject *parentGameObject);
 	PowerUp   * addPowerUp(GameObject* parentGameObject);
 	Asteroid  * addAsteroid(GameObject* parentGameObject);
-
+	SquareOfDeath* addSquareOfDeath(GameObject* parentGameObject);
 private:
 
 	void handleBehaviourLifeCycle(Behaviour * behaviour);
@@ -22,5 +22,6 @@ private:
 	Laser lasers[MAX_GAME_OBJECTS];
 	PowerUp powerups[MAX_GAME_OBJECTS];
 	Asteroid asteroids[MAX_GAME_OBJECTS];
+	SquareOfDeath squareofdeath[1];
 };
 

@@ -21,6 +21,8 @@ struct Behaviour
 
 	virtual void onCollisionTriggered(Collider &c1, Collider &c2) { }
 
+	virtual void onNotCollisionTriggered(Collider& c1, Collider& c2) { }
+
 	virtual void write(OutputMemoryStream &packet) { }
 
 	virtual void read(const InputMemoryStream &packet) { }
@@ -34,10 +36,20 @@ enum class BehaviourType : uint8
 	PowerUp,
 	Laser,
 	Asteroid,
+	SquareOfDeath,
 };
 
 struct Asteroid : public Behaviour
 {
+	enum class AsteroidType
+	{
+		NORTH,
+		SOUTH,
+		EAST,
+		WEST,
+	};
+	AsteroidType p_type;
+
 	BehaviourType type() const override { return BehaviourType::Asteroid; }
 
 	void start() override;
@@ -47,6 +59,15 @@ struct Asteroid : public Behaviour
 	void destroy() override;
 
 	void onCollisionTriggered(Collider& c1, Collider& c2) override;
+};
+
+struct SquareOfDeath : public Behaviour
+{
+	BehaviourType type() const override { return BehaviourType::SquareOfDeath; }
+
+	void start() override;
+
+	void update() override;
 };
 
 struct PowerUp : public Behaviour
@@ -96,6 +117,7 @@ struct Spaceship : public Behaviour
 	static const uint8 MAX_HIT_POINTS = 5;
 	uint8 hitPoints = MAX_HIT_POINTS;
 	float advanceSpeed = 200.0f;
+	bool imIn = true;
 
 	GameObject *lifebar = nullptr;
 
@@ -111,6 +133,7 @@ struct Spaceship : public Behaviour
 
 	void onCollisionTriggered(Collider &c1, Collider &c2) override;
 
+	void onNotCollisionTriggered(Collider& c1, Collider& c2) override;
 	
 
 	void write(OutputMemoryStream &packet) override;

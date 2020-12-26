@@ -22,6 +22,10 @@ bool ModuleBehaviour::update()
 	{
 		handleBehaviourLifeCycle(&behaviour);
 	}
+	for (SquareOfDeath& behaviour : squareofdeath)
+	{
+		handleBehaviourLifeCycle(&behaviour);
+	}
 	return true;
 }
 
@@ -37,6 +41,8 @@ Behaviour *ModuleBehaviour::addBehaviour(BehaviourType behaviourType, GameObject
 		return addPowerUp(parentGameObject);
 	case BehaviourType::Asteroid:
 		return addAsteroid(parentGameObject);
+	case BehaviourType::SquareOfDeath:
+		return addSquareOfDeath(parentGameObject);
 	default:
 		return nullptr;
 	}
@@ -96,6 +102,23 @@ PowerUp* ModuleBehaviour::addPowerUp(GameObject* parentGameObject)
 Asteroid* ModuleBehaviour::addAsteroid(GameObject* parentGameObject)
 {
 	for (Asteroid& behaviour : asteroids)
+	{
+		if (behaviour.gameObject == nullptr)
+		{
+			behaviour = {};
+			behaviour.gameObject = parentGameObject;
+			parentGameObject->behaviour = &behaviour;
+			return &behaviour;
+		}
+	}
+
+	ASSERT(false);
+	return nullptr;
+}
+
+SquareOfDeath* ModuleBehaviour::addSquareOfDeath(GameObject* parentGameObject)
+{
+	for (SquareOfDeath& behaviour : squareofdeath)
 	{
 		if (behaviour.gameObject == nullptr)
 		{
