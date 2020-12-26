@@ -31,12 +31,55 @@ enum class BehaviourType : uint8
 {
 	None,
 	Spaceship,
+	PowerUp,
 	Laser,
+	Asteroid,
 };
 
+struct Asteroid : public Behaviour
+{
+	BehaviourType type() const override { return BehaviourType::Asteroid; }
+
+	void start() override;
+
+	void update() override;
+
+	void destroy() override;
+
+	void onCollisionTriggered(Collider& c1, Collider& c2) override;
+};
+
+struct PowerUp : public Behaviour
+{
+	enum class PowerUpType
+	{
+		SPEED,
+		WEAPON,
+		BOMB,
+	};
+	PowerUpType p_type;
+	float secondsSinceCreation = 0.0f;
+
+	BehaviourType type() const override { return BehaviourType::PowerUp; }
+
+	void start() override;
+
+	void update() override;
+
+	void destroy() override;
+
+	void managePowerUp(GameObject *gO);
+};
 
 struct Laser : public Behaviour
 {
+	enum class LaserType
+	{
+		NORMAL,
+		BIG,
+		BURST,
+	};
+	LaserType l_type = LaserType::NORMAL;
 	float secondsSinceCreation = 0.0f;
 
 	BehaviourType type() const override { return BehaviourType::Laser; }
@@ -49,8 +92,10 @@ struct Laser : public Behaviour
 
 struct Spaceship : public Behaviour
 {
+	Laser::LaserType currentLaser = Laser::LaserType::NORMAL;
 	static const uint8 MAX_HIT_POINTS = 5;
 	uint8 hitPoints = MAX_HIT_POINTS;
+	float advanceSpeed = 200.0f;
 
 	GameObject *lifebar = nullptr;
 
@@ -65,6 +110,8 @@ struct Spaceship : public Behaviour
 	void destroy() override;
 
 	void onCollisionTriggered(Collider &c1, Collider &c2) override;
+
+	
 
 	void write(OutputMemoryStream &packet) override;
 

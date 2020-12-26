@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ModuleNetworking.h"
+#include "Behaviours.h"
 
 class ModuleNetworkingServer : public ModuleNetworking
 {
@@ -68,6 +69,17 @@ private:
 
 
 public:
+	//////////////////////////////////////////////////////////////////////
+	// Game related methods
+	//////////////////////////////////////////////////////////////////////
+	bool areMoreThanOne();
+	void manageGame();
+
+	//////////////////////////////////////////////////////////////////////
+	// Game related variables
+	//////////////////////////////////////////////////////////////////////
+	float lastPowerUpTime = 0.f;
+	int nextPowerUpTime = 5;
 
 	//////////////////////////////////////////////////////////////////////
 	// Spawning network objects
@@ -75,7 +87,9 @@ public:
 
 	GameObject * spawnPlayer(uint8 spaceshipType, vec2 initialPosition, float initialAngle);
 
+	GameObject* spawnPowerUp(vec2 initialPosition, float initialAngle, PowerUp::PowerUpType type);
 
+	GameObject* spawnAsteroid(vec2 initialPosition, float initialAngle);
 
 private:
 
@@ -101,7 +115,6 @@ private:
 	};
 
 	DelayedDestroyEntry netGameObjectsToDestroyWithDelay[MAX_GAME_OBJECTS] = {};
-
 
 
 	//////////////////////////////////////////////////////////////////////

@@ -1,10 +1,6 @@
 ﻿  UnityBuild.cpp
-D:\GithubRep\JocsOnline\Multiplayer Game\DeliveryManager.h(8,10): error C2143: error de sintaxis: falta ';' delante de '*'
-D:\GithubRep\JocsOnline\Multiplayer Game\DeliveryManager.h(8,10): error C4430: falta el especificador de tipo; se presupone int. Nota: C++ no admite default-int
-D:\GithubRep\JocsOnline\Multiplayer Game\DeliveryManager.h(8,59): error C2238: símbolos (token) inesperados delante de ';'
-D:\GithubRep\JocsOnline\Multiplayer Game\DeliveryManager.h(23,12): error C2065: 'Delivery': identificador no declarado
-D:\GithubRep\JocsOnline\Multiplayer Game\DeliveryManager.h(23,21): error C2059: error de sintaxis: '>'
-D:\GithubRep\JocsOnline\Multiplayer Game\DeliveryManager.cpp(6,28): error C2039: "writeSequenceNumber": no es un miembro de "DeliveryManager"
-D:\GithubRep\JocsOnline\Multiplayer Game\DeliveryManager.h(4): message : vea la declaración de 'DeliveryManager'
-D:\GithubRep\JocsOnline\Multiplayer Game\DeliveryManager.cpp(9,35): error C2065: 'nextSeqNum': identificador no declarado
-D:\GithubRep\JocsOnline\Multiplayer Game\DeliveryManager.cpp(14,5): error C2065: 'pendingDeliv': identificador no declarado
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\Behaviours.cpp(273,26): warning C4305: '+=': truncamiento de 'double' a 'float'
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(353,25): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(354,24): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(355,9): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
+  Networks.vcxproj -> C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\x64\Debug\Networks.exe

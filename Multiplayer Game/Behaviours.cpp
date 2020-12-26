@@ -60,7 +60,7 @@ void Spaceship::onInput(const InputController &input)
 
 	if (input.actionDown == ButtonState::Pressed)
 	{
-		const float advanceSpeed = 200.0f;
+		
 		gameObject->position += vec2FromDegrees(gameObject->angle) * advanceSpeed * Time.deltaTime;
 
 		if (isServer)
@@ -81,11 +81,20 @@ void Spaceship::onInput(const InputController &input)
 
 			laser->sprite = App->modRender->addSprite(laser);
 			laser->sprite->order = 3;
-			laser->sprite->texture = App->modResources->laser;
+			
 
 			Laser *laserBehaviour = App->modBehaviour->addLaser(laser);
 			laserBehaviour->isServer = isServer;
-
+			laserBehaviour->l_type = currentLaser;
+			switch (laserBehaviour->l_type)
+			{
+			case Laser::LaserType::BIG:
+				laser->sprite->texture = App->modResources->laserBig;
+				break;
+			case Laser::LaserType::NORMAL:
+				laser->sprite->texture = App->modResources->laser;
+				break;
+			}
 			laser->tag = gameObject->tag;
 		}
 	}
@@ -151,7 +160,58 @@ void Spaceship::onCollisionTriggered(Collider &c1, Collider &c2)
 			App->modSound->playAudioClip(App->modResources->audioClipExplosion);
 		}
 	}
+	if (c2.type == ColliderType::PowerUp && c2.gameObject->tag != gameObject->tag)
+	{
+		if (isServer)
+		{
+			NetworkDestroy(c2.gameObject);
+			dynamic_cast<PowerUp*>(c2.gameObject->behaviour)->managePowerUp(gameObject);
+		}
+	}
+	if (c2.type == ColliderType::Asteroid && c2.gameObject->tag != gameObject->tag)
+	{
+		if (isServer)
+		{
+			NetworkDestroy(c2.gameObject);
+			if (hitPoints > 0)
+			{
+				hitPoints--;
+				NetworkUpdate(gameObject);
+			}
+
+			//float size = 30 + 50.0f * Random.next();
+			//vec2 position = gameObject->position + 50.0f * vec2{ Random.next() - 0.5f, Random.next() - 0.5f };
+
+			//if (hitPoints <= 0)
+			//{
+			//	// Centered big explosion
+			//	size = 250.0f + 100.0f * Random.next();
+			//	position = gameObject->position;
+
+			//	NetworkDestroy(gameObject);
+			//}
+
+			//GameObject* explosion = NetworkInstantiate();
+			//explosion->position = position;
+			//explosion->size = vec2{ size, size };
+			//explosion->angle = 365.0f * Random.next();
+
+			//explosion->sprite = App->modRender->addSprite(explosion);
+			//explosion->sprite->texture = App->modResources->explosion1;
+			//explosion->sprite->order = 100;
+
+			//explosion->animation = App->modRender->addAnimation(explosion);
+			//explosion->animation->clip = App->modResources->explosionClip;
+
+			//NetworkDestroy(explosion, 2.0f);
+
+			// NOTE(jesus): Only played in the server right now...
+			// You need to somehow make this happen in clients
+			App->modSound->playAudioClip(App->modResources->audioClipExplosion);
+		}
+	}
 }
+
 
 void Spaceship::write(OutputMemoryStream & packet)
 {
@@ -161,4 +221,70 @@ void Spaceship::write(OutputMemoryStream & packet)
 void Spaceship::read(const InputMemoryStream & packet)
 {
 	packet >> hitPoints;
+}
+
+void PowerUp::start()
+{
+	gameObject->tag = (uint32)(Random.next() * UINT_MAX);
+}
+
+void PowerUp::update()
+{
+	//gameObject->position += vec2{ -5.0f, 0 };
+	if (p_type == PowerUpType::BOMB)
+	{
+		secondsSinceCreation += Time.deltaTime;
+		if (isServer)
+		{
+			if (secondsSinceCreation > 5.0f)
+			{
+				NetworkDestroy(gameObject);
+			}
+		}
+	}
+	
+}
+
+void PowerUp::destroy()
+{
+}
+
+void PowerUp::managePowerUp(GameObject *gO)
+{
+	switch (p_type)
+	{
+	case PowerUpType::WEAPON:
+		dynamic_cast<Spaceship*>(gO->behaviour)->currentLaser = Laser::LaserType::BIG;
+		break;
+	case PowerUpType::BOMB:
+		break;
+	case PowerUpType::SPEED:
+		dynamic_cast<Spaceship*>(gO->behaviour)->advanceSpeed = 400;
+		break;
+	}
+}
+
+void Asteroid::start()
+{
+}
+
+void Asteroid::update()
+{
+	gameObject->angle += 0.1;
+}
+
+void Asteroid::destroy()
+{
+}
+
+void Asteroid::onCollisionTriggered(Collider& c1, Collider& c2)
+{
+	if (c2.type == ColliderType::Laser && c2.gameObject->tag != gameObject->tag)
+	{
+		if (isServer)
+		{
+			NetworkDestroy(c2.gameObject); // Destroy the laser
+			NetworkDestroy(gameObject); // Destroy the laser
+		}
+	}
 }

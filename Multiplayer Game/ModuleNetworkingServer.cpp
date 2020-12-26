@@ -220,6 +220,8 @@ void ModuleNetworkingServer::onUpdate()
 				}
 			}
 		}
+		if (areMoreThanOne())//Prevent the game to start with only 1 player
+			manageGame();
 
 		for (ClientProxy &clientProxy : clientProxies)
 		{
@@ -327,6 +329,36 @@ void ModuleNetworkingServer::destroyClientProxy(ClientProxy *clientProxy)
 // Spawning
 //////////////////////////////////////////////////////////////////////
 
+bool ModuleNetworkingServer::areMoreThanOne()
+{
+	int cont = 0;
+	for (ClientProxy& clientProxy : clientProxies)
+	{
+		if (clientProxy.connected)
+		{
+			cont++;
+			if (cont > 1)
+				return true;
+		}
+	}
+	return false;
+}
+
+void ModuleNetworkingServer::manageGame()
+{
+
+	
+	if (Time.time - lastPowerUpTime > nextPowerUpTime)
+	{
+		lastPowerUpTime = Time.time;
+		nextPowerUpTime = 10 * Random.next();
+		int t = (int)3 * Random.next();
+		PowerUp::PowerUpType type = (PowerUp::PowerUpType)t;
+		spawnPowerUp(vec2{ 0,0 }, 90, type);
+	}
+	//spawnAsteroid(vec2{ 0,0 }, 90);
+}
+
 GameObject * ModuleNetworkingServer::spawnPlayer(uint8 spaceshipType, vec2 initialPosition, float initialAngle)
 {
 	// Create a new game object with the player properties
@@ -359,7 +391,57 @@ GameObject * ModuleNetworkingServer::spawnPlayer(uint8 spaceshipType, vec2 initi
 
 	return gameObject;
 }
+GameObject* ModuleNetworkingServer::spawnPowerUp(vec2 initialPosition, float initialAngle, PowerUp::PowerUpType type)
+{
+	GameObject* powerup = NetworkInstantiate();
+	powerup->position = initialPosition;
+	powerup->angle = initialAngle;
+	powerup->sprite = App->modRender->addSprite(powerup);
+	powerup->sprite->order = 3;
+	
+	powerup->collider = App->modCollision->addCollider(ColliderType::PowerUp, powerup);
 
+	PowerUp* powerupBehaviour = App->modBehaviour->addPowerUp(powerup);
+	powerupBehaviour->isServer = true;
+	powerupBehaviour->p_type = type;
+	powerup->behaviour = powerupBehaviour;
+
+	switch (powerupBehaviour->p_type)
+	{
+	case PowerUp::PowerUpType::SPEED:
+		powerup->sprite->texture = App->modResources->powerup01;
+		break;
+	case PowerUp::PowerUpType::BOMB:
+		powerup->sprite->texture = App->modResources->bomb;
+		break;
+	case PowerUp::PowerUpType::WEAPON:
+		powerup->sprite->texture = App->modResources->powerupWeapon;
+		break;
+	}
+	return powerup;
+}
+
+GameObject* ModuleNetworkingServer::spawnAsteroid(vec2 initialPosition, float initialAngle)
+{
+	GameObject* gameObject = NetworkInstantiate();
+	gameObject->position = initialPosition;
+	gameObject->angle = initialAngle;
+	gameObject->size = { 100,100 };
+	// Create sprite
+	gameObject->sprite = App->modRender->addSprite(gameObject);
+	gameObject->sprite->order = 6;
+	gameObject->sprite->texture = App->modResources->asteroid1;
+
+	// Create collider
+	gameObject->collider = App->modCollision->addCollider(ColliderType::Asteroid, gameObject);
+	gameObject->collider->isTrigger = true;
+	// Create behaviour
+	Asteroid* asteroidBehaviour = App->modBehaviour->addAsteroid(gameObject);
+	gameObject->behaviour = asteroidBehaviour;
+	gameObject->behaviour->isServer = true;
+
+	return gameObject;
+}
 
 //////////////////////////////////////////////////////////////////////
 // Update / destruction

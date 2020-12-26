@@ -11,6 +11,8 @@ public:
 	Behaviour * addBehaviour(BehaviourType behaviourType, GameObject *parentGameObject);
 	Spaceship * addSpaceship(GameObject *parentGameObject);
 	Laser     * addLaser(GameObject *parentGameObject);
+	PowerUp   * addPowerUp(GameObject* parentGameObject);
+	Asteroid  * addAsteroid(GameObject* parentGameObject);
 
 private:
 
@@ -18,5 +20,7 @@ private:
 
 	Spaceship spaceships[MAX_CLIENTS];
 	Laser lasers[MAX_GAME_OBJECTS];
+	PowerUp powerups[MAX_GAME_OBJECTS];
+	Asteroid asteroids[MAX_GAME_OBJECTS];
 };
 
