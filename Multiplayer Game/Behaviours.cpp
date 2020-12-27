@@ -31,10 +31,6 @@ void Laser::update()
 	}
 }
 
-
-
-
-
 void Spaceship::start()
 {
 	gameObject->tag = (uint32)(Random.next() * UINT_MAX);
@@ -111,6 +107,8 @@ void Spaceship::update()
 
 	if (bombing)
 		manageBombs();
+
+	updateCurrentPowerUps();
 }
 
 void Spaceship::destroy()
@@ -168,8 +166,10 @@ void Spaceship::onCollisionTriggered(Collider &c1, Collider &c2)
 	{
 		if (isServer)
 		{
-			NetworkDestroy(c2.gameObject);
+			lookForPowerUp(dynamic_cast<PowerUp*>(c2.gameObject->behaviour)->p_type);
 			dynamic_cast<PowerUp*>(c2.gameObject->behaviour)->managePowerUp(gameObject);
+			currentPowerUps.emplace(dynamic_cast<PowerUp*>(c2.gameObject->behaviour)->p_type, Time.time);
+			NetworkDestroy(c2.gameObject);
 		}
 	}
 
@@ -243,7 +243,7 @@ void Spaceship::onNotCollisionTriggered(Collider& c1, Collider& c2)
 {
 	if (c2.type == ColliderType::SquareOfDeath)
 	{
-		hitPoints -= 0.1;
+		hitPoints -= 1;
 		if (hitPoints <= 0)
 		{
 			NetworkDestroy(gameObject);
@@ -276,6 +276,49 @@ void Spaceship::manageBombs()
 	}
 }
 
+void Spaceship::updateCurrentPowerUps()
+{
+	if (currentPowerUps.empty())
+		return;
+
+	auto item = currentPowerUps.begin();
+	while (item != currentPowerUps.end())
+	{
+		if (Time.time - (*item).second > 5.0f)
+		{
+			switch ((*item).first)
+			{
+			case PowerUp::PowerUpType::SPEED:
+				advanceSpeed = 400;
+				break;
+			case PowerUp::PowerUpType::BOMB:
+				bombing = false;
+				break;
+			}
+			item = currentPowerUps.erase(item);
+		}
+		else
+			item++;
+	}
+}
+
+void Spaceship::lookForPowerUp(PowerUp::PowerUpType type)
+{
+	if (currentPowerUps.empty())
+		return;
+
+	auto item = currentPowerUps.begin();
+	while (item != currentPowerUps.end())
+	{
+		if ((*item).first == type)
+		{
+			item = currentPowerUps.erase(item);
+		}
+		else
+			item++;
+	}
+}
+
 
 void Spaceship::write(OutputMemoryStream & packet)
 {
@@ -290,10 +333,12 @@ void Spaceship::read(const InputMemoryStream & packet)
 void PowerUp::start()
 {
 	gameObject->tag = (uint32)(Random.next() * UINT_MAX);
+
 }
 
 void PowerUp::update()
 {
+
 }
 
 void PowerUp::destroy()
@@ -312,7 +357,7 @@ void PowerUp::managePowerUp(GameObject *gO)
 		dynamic_cast<Spaceship*>(gO->behaviour)->timer = Time.time;
 		break;
 	case PowerUpType::SPEED:
-		dynamic_cast<Spaceship*>(gO->behaviour)->advanceSpeed = 400;
+		dynamic_cast<Spaceship*>(gO->behaviour)->advanceSpeed = 800;
 		break;
 	}
 }
@@ -320,12 +365,11 @@ void PowerUp::managePowerUp(GameObject *gO)
 void Asteroid::start()
 {
 	lifeTimer = Time.time;
+
 }
 
 void Asteroid::update()
 {
-	if (Time.time - lifeTimer > 5.0f)
-		NetworkDestroy(gameObject);
 
 	gameObject->angle += 2;
 	switch (p_type)
@@ -389,7 +433,7 @@ void Bomb::update()
 	{
 		if (secondsSinceCreation > 5.0f)
 		{
-			NetworkDestroy(gameObject);
+			NetworkDestroy(gameObject);//Explosion
 		}
 	}
 }

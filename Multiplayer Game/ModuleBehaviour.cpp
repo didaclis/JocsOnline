@@ -31,7 +31,6 @@ bool ModuleBehaviour::update()
 	{
 		handleBehaviourLifeCycle(&behaviour);
 	}
-
 	return true;
 }
 
@@ -155,6 +154,7 @@ Bomb* ModuleBehaviour::addBomb(GameObject* parentGameObject)
 	ASSERT(false);
 	return nullptr;
 }
+
 
 void ModuleBehaviour::handleBehaviourLifeCycle(Behaviour *behaviour)
 {

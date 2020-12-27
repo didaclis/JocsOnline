@@ -355,7 +355,7 @@ void ModuleNetworkingServer::manageGame()
 	if (Time.time - lastPowerUpTime > nextPowerUpTime) //PowerUps Management
 	{
 		lastPowerUpTime = Time.time;
-		nextPowerUpTime = 5 + 15 * Random.next();
+		nextPowerUpTime = 3 + 5 * Random.next();
 		int t = (int)3 * Random.next();
 		PowerUp::PowerUpType type = (PowerUp::PowerUpType)t;
 		vec2 initialPosition = withinSquarePosition();
@@ -436,6 +436,8 @@ GameObject* ModuleNetworkingServer::spawnPowerUp(vec2 initialPosition, float ini
 		powerup->sprite->texture = App->modResources->powerupWeapon;
 		break;
 	}
+
+	NetworkDestroy(powerup,5.0f);
 	return powerup;
 }
 
@@ -489,7 +491,7 @@ GameObject* ModuleNetworkingServer::spawnAsteroid(float initialAngle, Asteroid::
 	asteroidBehaviour->p_type = type;
 	gameObject->behaviour = asteroidBehaviour;
 	gameObject->behaviour->isServer = true;
-
+	NetworkDestroy(gameObject, 8.0f);
 	return gameObject;
 }
 

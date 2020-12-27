@@ -1,5 +1,6 @@
 #pragma once
 
+#include <map>
 
 enum class BehaviourType : uint8;
 
@@ -50,7 +51,7 @@ struct Asteroid : public Behaviour
 		WEST,
 	};
 	AsteroidType p_type;
-
+	float lifeTimer = 0.f;
 	BehaviourType type() const override { return BehaviourType::Asteroid; }
 
 	void start() override;
@@ -91,7 +92,7 @@ struct PowerUp : public Behaviour
 		BOMB,
 	};
 	PowerUpType p_type;
-
+	float secondsSinceCreation = 0.0f;
 
 	BehaviourType type() const override { return BehaviourType::PowerUp; }
 
@@ -126,12 +127,14 @@ struct Laser : public Behaviour
 struct Spaceship : public Behaviour
 {
 	Laser::LaserType currentLaser = Laser::LaserType::NORMAL;
-	static const uint8 MAX_HIT_POINTS = 5;
-	uint8 hitPoints = MAX_HIT_POINTS;
-	float advanceSpeed = 200.0f;
+	static const uint16 MAX_HIT_POINTS = 300;
+	uint16 hitPoints = MAX_HIT_POINTS;
+	float advanceSpeed = 400.0f;
 	bool bombing = false;
-	float timer = 0.f;
+	float timer = 0.0f;
 	GameObject *lifebar = nullptr;
+	//GameObject *
+	std::map<PowerUp::PowerUpType, double> currentPowerUps;
 
 	BehaviourType type() const override { return BehaviourType::Spaceship; }
 
@@ -148,6 +151,10 @@ struct Spaceship : public Behaviour
 	void onNotCollisionTriggered(Collider& c1, Collider& c2) override;
 	
 	void manageBombs();
+
+	void updateCurrentPowerUps();
+
+	void lookForPowerUp(PowerUp::PowerUpType type);
 
 	void write(OutputMemoryStream &packet) override;
 
