@@ -319,11 +319,38 @@ void PowerUp::managePowerUp(GameObject *gO)
 
 void Asteroid::start()
 {
+	lifeTimer = Time.time;
 }
 
 void Asteroid::update()
 {
-	gameObject->angle += 0.1;
+	if (Time.time - lifeTimer > 5.0f)
+		NetworkDestroy(gameObject);
+
+	gameObject->angle += 2;
+	switch (p_type)
+	{
+	case AsteroidType::NORTH:
+	{
+		gameObject->position.y += 10;
+		break;
+	}
+	case AsteroidType::SOUTH:
+	{
+		gameObject->position.y -= 10;
+		break;
+	}
+	case AsteroidType::EAST:
+	{
+		gameObject->position.x -= 10;
+		break;
+	}
+	case AsteroidType::WEST:
+	{
+		gameObject->position.x += 10;
+		break;
+	}
+	}
 }
 
 void Asteroid::destroy()
@@ -332,12 +359,12 @@ void Asteroid::destroy()
 
 void Asteroid::onCollisionTriggered(Collider& c1, Collider& c2)
 {
-	if (c2.type == ColliderType::Laser && c2.gameObject->tag != gameObject->tag)
+	if (c2.type == ColliderType::Laser)
 	{
 		if (isServer)
 		{
 			NetworkDestroy(c2.gameObject); // Destroy the laser
-			NetworkDestroy(gameObject); // Destroy the laser
+			NetworkDestroy(gameObject);
 		}
 	}
 }

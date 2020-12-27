@@ -361,11 +361,14 @@ void ModuleNetworkingServer::manageGame()
 		vec2 initialPosition = withinSquarePosition();
 		spawnPowerUp(initialPosition, 90, type);
 	}
-	//if (Time.time - lastAsteroidTime > nextAsteroidTime)//Asteroids Management
-	//{
-	//	lastAsteroidTime = Time.time;
-	//	nextAsteroidTime = 5 + 15 * Random.next();
-	//}
+	if (Time.time - lastAsteroidTime > nextAsteroidTime)//Asteroids Management
+	{
+		lastAsteroidTime = Time.time;
+		nextAsteroidTime = 5+ 10 * Random.next();
+		int t = (int)4 * Random.next();
+		Asteroid::AsteroidType type = (Asteroid::AsteroidType)t;
+		spawnAsteroid(90, type);
+	}
 }
 vec2 ModuleNetworkingServer::withinSquarePosition()
 {
@@ -439,22 +442,38 @@ GameObject* ModuleNetworkingServer::spawnPowerUp(vec2 initialPosition, float ini
 GameObject* ModuleNetworkingServer::spawnAsteroid(float initialAngle, Asteroid::AsteroidType type)
 {
 	GameObject* gameObject = NetworkInstantiate();
-	//switch (type)
-	//{
-	//case Asteroid::AsteroidType::NORTH:
-	//	gameObject->position = ;
-	//	break;
-	//case Asteroid::AsteroidType::SOUTH:
-	//	gameObject->position = ;
-	//	break;
-	//case Asteroid::AsteroidType::EAST:
-	//	gameObject->position = ;
-	//	break;
-	//case Asteroid::AsteroidType::WEST:
-	//	gameObject->position = ;
-	//	break;
-	//}
-	
+	switch (type)
+	{
+	case Asteroid::AsteroidType::NORTH:
+	{
+		vec2 loc = { square->size.x * 0.5, square->size.y * 0.5 };
+		vec2 vec = square->position - loc;
+		gameObject->position = { vec.x + square->size.x * Random.next(), vec.y };
+		break;
+	}
+	case Asteroid::AsteroidType::SOUTH:
+	{
+		vec2 loc = { square->size.x * 0.5, square->size.y * 0.5 };
+		vec2 vec = square->position + loc;
+		gameObject->position = { vec.x + square->size.x * Random.next(), vec.y };
+		break;
+	}
+	case Asteroid::AsteroidType::EAST:
+	{
+		vec2 loc = { square->size.x * 0.5, square->size.y * 0.5 };
+		vec2 vec = square->position + loc;
+		gameObject->position = { vec.x, vec.y + square->size.y * Random.next() };
+		break;
+	}
+	case Asteroid::AsteroidType::WEST:
+	{
+		vec2 loc = { square->size.x * 0.5, square->size.y * 0.5 };
+		vec2 vec = square->position - loc;
+		gameObject->position = { vec.x, vec.y + square->size.y * Random.next() };
+		break;
+	}
+	}
+
 	gameObject->angle = initialAngle;
 	gameObject->size = { 100,100 };
 	// Create sprite
@@ -467,6 +486,7 @@ GameObject* ModuleNetworkingServer::spawnAsteroid(float initialAngle, Asteroid::
 	gameObject->collider->isTrigger = true;
 	// Create behaviour
 	Asteroid* asteroidBehaviour = App->modBehaviour->addAsteroid(gameObject);
+	asteroidBehaviour->p_type = type;
 	gameObject->behaviour = asteroidBehaviour;
 	gameObject->behaviour->isServer = true;
 
