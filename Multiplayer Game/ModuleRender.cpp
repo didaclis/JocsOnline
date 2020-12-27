@@ -559,10 +559,10 @@ void ModuleRender::renderScene()
 	ctx->RSSetState(g_pRasterizerState);
 
 	// Projection matrix
-	float L = 0.5f * -vp.Width;
-	float R = 0.5f *  vp.Width;
-	float T = 0.5f * -vp.Height;
-	float B = 0.5f *  vp.Height;
+	float L = zoomMod * -vp.Width;
+	float R = zoomMod *  vp.Width;
+	float T = zoomMod * -vp.Height;
+	float B = zoomMod *  vp.Height;
 	XMMATRIX ProjectionMatrix = ::XMMatrixOrthographicOffCenterRH(L, R, B, T, -1, 1);
 
 	// View matrix

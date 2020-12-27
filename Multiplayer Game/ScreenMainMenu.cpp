@@ -80,6 +80,7 @@ void ScreenMainMenu::gui()
 			App->modScreen->screenGame->playerName = playerNameStr;
 			App->modScreen->screenGame->spaceshipType = spaceshipType;
 			App->modScreen->swapScreensWithTransition(this, App->modScreen->screenGame);
+			//App->modRender->zoomMod = 0.8;
 		}
 		else
 		{

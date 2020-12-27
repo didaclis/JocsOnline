@@ -19,7 +19,7 @@ void ScreenGame::enable()
 		App->modNetClient->setPlayerInfo(playerName, spaceshipType);
 		App->modNetClient->setEnabled(true);
 	}
-
+	App->modRender->zoomMod = 0.8;
 	spaceTopLeft = Instantiate();
 	spaceTopLeft->sprite = App->modRender->addSprite(spaceTopLeft);
 	spaceTopLeft->sprite->texture = App->modResources->space;

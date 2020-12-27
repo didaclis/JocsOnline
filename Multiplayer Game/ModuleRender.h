@@ -105,7 +105,7 @@ public:
 	vec2 cameraPosition = {};
 
 	bool mustRenderColliders = false;
-
+	float zoomMod = 0.2f;
 
 private:
 

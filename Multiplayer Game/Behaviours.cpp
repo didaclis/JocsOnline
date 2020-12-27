@@ -98,6 +98,11 @@ void Spaceship::onInput(const InputController &input)
 			laser->tag = gameObject->tag;
 		}
 	}
+
+	if (Mouse.buttons[1] == ButtonState::Press)
+	{
+		LOG("HOLA");
+	}
 }
 
 void Spaceship::update()
@@ -256,7 +261,7 @@ void PowerUp::update()
 			}
 		}
 	}
-	gameObject->size += vec2{ 0.1, 0.1 };
+	//gameObject->size += vec2{ 0.1, 0.1 };
 }
 
 void PowerUp::destroy()

@@ -348,7 +348,7 @@ void ModuleNetworkingServer::manageGame()
 {
 	if (beginSquare == false)
 	{
-		spawnSquareOfDeath();
+		square = spawnSquareOfDeath();
 		beginSquare = true;
 	}
 	
@@ -358,7 +358,8 @@ void ModuleNetworkingServer::manageGame()
 		nextPowerUpTime = 5 + 15 * Random.next();
 		int t = (int)3 * Random.next();
 		PowerUp::PowerUpType type = (PowerUp::PowerUpType)t;
-		spawnPowerUp(vec2{ 0,0 }, 90, type);
+		vec2 initialPosition = withinSquarePosition();
+		spawnPowerUp(initialPosition, 90, type);
 	}
 	//if (Time.time - lastAsteroidTime > nextAsteroidTime)//Asteroids Management
 	//{
@@ -366,7 +367,13 @@ void ModuleNetworkingServer::manageGame()
 	//	nextAsteroidTime = 5 + 15 * Random.next();
 	//}
 }
+vec2 ModuleNetworkingServer::withinSquarePosition()
+{
+	vec2 upLeftPos = { square->size.x * 0.5, square->size.y * 0.5 }; // Upper left side of the square
+	vec2 vec = square->position - upLeftPos;
 
+	return { vec.x + square->size.x * Random.next(), vec.y + square->size.y * Random.next() };
+}
 GameObject * ModuleNetworkingServer::spawnPlayer(uint8 spaceshipType, vec2 initialPosition, float initialAngle)
 {
 	// Create a new game object with the player properties
@@ -470,6 +477,7 @@ GameObject* ModuleNetworkingServer::spawnSquareOfDeath()
 {
 	GameObject* gameObject = NetworkInstantiate();
 	gameObject->angle = 0;
+	gameObject->position = vec2{ 0,0 };
 	// Create sprite
 	gameObject->sprite = App->modRender->addSprite(gameObject);
 	gameObject->sprite->order = 10;
