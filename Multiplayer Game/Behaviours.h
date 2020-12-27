@@ -35,6 +35,7 @@ enum class BehaviourType : uint8
 	Spaceship,
 	PowerUp,
 	Laser,
+	Bomb,
 	Asteroid,
 	SquareOfDeath,
 };
@@ -61,6 +62,17 @@ struct Asteroid : public Behaviour
 	void onCollisionTriggered(Collider& c1, Collider& c2) override;
 };
 
+struct Bomb : public Behaviour
+{
+	float secondsSinceCreation = 0.0f;
+
+	BehaviourType type() const override { return BehaviourType::Bomb; }
+
+	void start() override;
+
+	void update() override;
+};
+
 struct SquareOfDeath : public Behaviour
 {
 	BehaviourType type() const override { return BehaviourType::SquareOfDeath; }
@@ -79,7 +91,7 @@ struct PowerUp : public Behaviour
 		BOMB,
 	};
 	PowerUpType p_type;
-	float secondsSinceCreation = 0.0f;
+
 
 	BehaviourType type() const override { return BehaviourType::PowerUp; }
 
@@ -117,8 +129,8 @@ struct Spaceship : public Behaviour
 	static const uint8 MAX_HIT_POINTS = 5;
 	uint8 hitPoints = MAX_HIT_POINTS;
 	float advanceSpeed = 200.0f;
-	bool imIn = true;
-
+	bool bombing = false;
+	float timer = 0.f;
 	GameObject *lifebar = nullptr;
 
 	BehaviourType type() const override { return BehaviourType::Spaceship; }
@@ -135,6 +147,7 @@ struct Spaceship : public Behaviour
 
 	void onNotCollisionTriggered(Collider& c1, Collider& c2) override;
 	
+	void manageBombs();
 
 	void write(OutputMemoryStream &packet) override;
 

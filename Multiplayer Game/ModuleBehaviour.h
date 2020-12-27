@@ -14,6 +14,7 @@ public:
 	PowerUp   * addPowerUp(GameObject* parentGameObject);
 	Asteroid  * addAsteroid(GameObject* parentGameObject);
 	SquareOfDeath* addSquareOfDeath(GameObject* parentGameObject);
+	Bomb	  * addBomb(GameObject* parentGameObject);
 private:
 
 	void handleBehaviourLifeCycle(Behaviour * behaviour);
@@ -23,5 +24,6 @@ private:
 	PowerUp powerups[MAX_GAME_OBJECTS];
 	Asteroid asteroids[MAX_GAME_OBJECTS];
 	SquareOfDeath squareofdeath[1];
+	Bomb bombs[MAX_GAME_OBJECTS];
 };
 

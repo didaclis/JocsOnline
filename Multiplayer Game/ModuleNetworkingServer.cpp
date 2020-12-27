@@ -427,7 +427,7 @@ GameObject* ModuleNetworkingServer::spawnPowerUp(vec2 initialPosition, float ini
 		powerup->sprite->texture = App->modResources->powerup01;
 		break;
 	case PowerUp::PowerUpType::BOMB:
-		powerup->sprite->texture = App->modResources->bomb;
+		powerup->sprite->texture = App->modResources->powerupBomb;
 		break;
 	case PowerUp::PowerUpType::WEAPON:
 		powerup->sprite->texture = App->modResources->powerupWeapon;

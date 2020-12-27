@@ -22,6 +22,7 @@ public:
 	Texture* powerupWeapon = nullptr;
 	Texture* bomb = nullptr;
 	Texture* squareOfDeath = nullptr;
+	Texture* powerupBomb = nullptr;
 	AnimationClip *explosionClip = nullptr;
 
 	AudioClip *audioClipLaser = nullptr;

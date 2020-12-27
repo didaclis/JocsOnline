@@ -98,11 +98,6 @@ void Spaceship::onInput(const InputController &input)
 			laser->tag = gameObject->tag;
 		}
 	}
-
-	if (Mouse.buttons[1] == ButtonState::Press)
-	{
-		LOG("HOLA");
-	}
 }
 
 void Spaceship::update()
@@ -113,6 +108,9 @@ void Spaceship::update()
 	lifebar->position = gameObject->position + vec2{ -50.0f, -50.0f };
 	lifebar->size = vec2{ lifeRatio * 80.0f, 5.0f };
 	lifebar->sprite->color = lerp(colorDead, colorAlive, lifeRatio);
+
+	if (bombing)
+		manageBombs();
 }
 
 void Spaceship::destroy()
@@ -175,7 +173,29 @@ void Spaceship::onCollisionTriggered(Collider &c1, Collider &c2)
 		}
 	}
 
-	if (c2.type == ColliderType::Asteroid && c2.gameObject->tag != gameObject->tag)
+	if (c2.type == ColliderType::Bomb && c2.gameObject->tag != gameObject->tag)
+	{
+		if (isServer)
+		{
+			NetworkDestroy(c2.gameObject);
+
+			if (hitPoints > 0)
+			{
+				hitPoints--;
+				NetworkUpdate(gameObject);
+			}
+			if (hitPoints <= 0)
+			{
+				// Centered big explosion
+				//size = 250.0f + 100.0f * Random.next();
+				//position = gameObject->position;
+
+				NetworkDestroy(gameObject);
+			}
+		}
+	}
+
+	if (c2.type == ColliderType::Asteroid)
 	{
 		if (isServer)
 		{
@@ -231,6 +251,31 @@ void Spaceship::onNotCollisionTriggered(Collider& c1, Collider& c2)
 	}
 }
 
+void Spaceship::manageBombs()
+{
+	if (Time.time - timer > 2)
+	{
+		timer = Time.time;
+		if (isServer)
+		{
+			GameObject* bomb = NetworkInstantiate();
+
+			bomb->position = gameObject->position;
+			bomb->angle = gameObject->angle;
+			//bomb->size = { 20, 60 };
+
+			bomb->sprite = App->modRender->addSprite(bomb);
+			bomb->sprite->order = 3;
+			bomb->collider = App->modCollision->addCollider(ColliderType::Bomb, bomb);
+
+			Bomb* bombBehaviour = App->modBehaviour->addBomb(bomb);
+			bombBehaviour->isServer = isServer;
+			bomb->sprite->texture = App->modResources->bomb;
+			bomb->tag = gameObject->tag;
+		}
+	}
+}
+
 
 void Spaceship::write(OutputMemoryStream & packet)
 {
@@ -249,19 +294,6 @@ void PowerUp::start()
 
 void PowerUp::update()
 {
-	//gameObject->position += vec2{ -5.0f, 0 };
-	if (p_type == PowerUpType::BOMB)
-	{
-		secondsSinceCreation += Time.deltaTime;
-		if (isServer)
-		{
-			if (secondsSinceCreation > 5.0f)
-			{
-				NetworkDestroy(gameObject);
-			}
-		}
-	}
-	//gameObject->size += vec2{ 0.1, 0.1 };
 }
 
 void PowerUp::destroy()
@@ -276,6 +308,8 @@ void PowerUp::managePowerUp(GameObject *gO)
 		dynamic_cast<Spaceship*>(gO->behaviour)->currentLaser = Laser::LaserType::BIG;
 		break;
 	case PowerUpType::BOMB:
+		dynamic_cast<Spaceship*>(gO->behaviour)->bombing = true;
+		dynamic_cast<Spaceship*>(gO->behaviour)->timer = Time.time;
 		break;
 	case PowerUpType::SPEED:
 		dynamic_cast<Spaceship*>(gO->behaviour)->advanceSpeed = 400;
@@ -315,4 +349,20 @@ void SquareOfDeath::start()
 void SquareOfDeath::update()
 {
 	gameObject->size -= vec2{ 0.1,0.1 };
+}
+
+void Bomb::start()
+{
+}
+
+void Bomb::update()
+{
+	secondsSinceCreation += Time.deltaTime;
+	if (isServer)
+	{
+		if (secondsSinceCreation > 5.0f)
+		{
+			NetworkDestroy(gameObject);
+		}
+	}
 }

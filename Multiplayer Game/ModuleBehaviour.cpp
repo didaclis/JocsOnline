@@ -26,6 +26,12 @@ bool ModuleBehaviour::update()
 	{
 		handleBehaviourLifeCycle(&behaviour);
 	}
+
+	for (Bomb& behaviour : bombs)
+	{
+		handleBehaviourLifeCycle(&behaviour);
+	}
+
 	return true;
 }
 
@@ -119,6 +125,23 @@ Asteroid* ModuleBehaviour::addAsteroid(GameObject* parentGameObject)
 SquareOfDeath* ModuleBehaviour::addSquareOfDeath(GameObject* parentGameObject)
 {
 	for (SquareOfDeath& behaviour : squareofdeath)
+	{
+		if (behaviour.gameObject == nullptr)
+		{
+			behaviour = {};
+			behaviour.gameObject = parentGameObject;
+			parentGameObject->behaviour = &behaviour;
+			return &behaviour;
+		}
+	}
+
+	ASSERT(false);
+	return nullptr;
+}
+
+Bomb* ModuleBehaviour::addBomb(GameObject* parentGameObject)
+{
+	for (Bomb& behaviour : bombs)
 	{
 		if (behaviour.gameObject == nullptr)
 		{

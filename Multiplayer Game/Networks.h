@@ -88,7 +88,8 @@ enum class ColliderType
 	Laser,
 	PowerUp,
 	Asteroid,
-	SquareOfDeath
+	SquareOfDeath,
+	Bomb
 };
 
 
