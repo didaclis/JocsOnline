@@ -103,6 +103,7 @@ struct PowerUp : public Behaviour
 	void destroy() override;
 
 	void managePowerUp(GameObject *gO);
+
 };
 
 struct Laser : public Behaviour
@@ -131,9 +132,12 @@ struct Spaceship : public Behaviour
 	uint16 hitPoints = MAX_HIT_POINTS;
 	float advanceSpeed = 400.0f;
 	bool bombing = false;
+	bool fTime = true;
 	float timer = 0.0f;
 	GameObject *lifebar = nullptr;
-	//GameObject *
+	GameObject* uiPUSpeed = nullptr;
+	GameObject* uiPUWeapon = nullptr;
+	GameObject* uiPUBomb = nullptr;
 	std::map<PowerUp::PowerUpType, double> currentPowerUps;
 
 	BehaviourType type() const override { return BehaviourType::Spaceship; }

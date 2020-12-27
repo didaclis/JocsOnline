@@ -1,8 +1,8 @@
 ﻿  UnityBuild.cpp
-C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\Behaviours.cpp(258,15): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\Behaviours.cpp(357,56): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\Behaviours.cpp(367,18): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\Behaviours.cpp(422,36): warning C4305: 'inicializando': truncamiento de 'double' a 'float'
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\Behaviours.cpp(277,15): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\Behaviours.cpp(378,56): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\Behaviours.cpp(393,18): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\Behaviours.cpp(448,36): warning C4305: 'inicializando': truncamiento de 'double' a 'float'
 C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(357,25): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
 C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(358,23): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
 C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(359,9): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
