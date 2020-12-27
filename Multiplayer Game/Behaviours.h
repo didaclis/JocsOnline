@@ -5,7 +5,7 @@ enum class BehaviourType : uint8;
 
 struct Behaviour
 {
-	GameObject *gameObject = nullptr;
+	GameObject* gameObject = nullptr;
 	bool isServer = false;
 	bool isLocalPlayer = false;
 

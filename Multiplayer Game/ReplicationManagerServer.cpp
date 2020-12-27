@@ -18,9 +18,7 @@ void ReplicationManagerServer::destroy(uint32 networkId)
 }
 
 void ReplicationManagerServer::write(OutputMemoryStream& packet)
-{
-
-	
+{	
 	packet << commands.size();
 	for (auto iter = commands.begin(); iter != commands.end();)
 	{
@@ -61,7 +59,21 @@ void ReplicationManagerServer::write(OutputMemoryStream& packet)
 				std::string name = " ";
 				packet << name;
 			}
-		}		
+
+			if (gameObject->animation != nullptr && gameObject->animation->clip != nullptr)
+				packet << (int)gameObject->animation->clip->id;
+			else
+				packet << -1;
+		}	
+
+		if ((*iter).second == ReplicationAction::Update)
+		{
+			if (gameObject->behaviour != nullptr)
+				if (gameObject->behaviour->type() == BehaviourType::Spaceship)
+					gameObject->behaviour->write(packet);
+
+		}
+
 		(*iter).second = ReplicationAction::None;
 		++iter;
 
