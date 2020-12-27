@@ -351,23 +351,46 @@ void Spaceship::lookForPowerUp(PowerUp::PowerUpType type)
 void Spaceship::write(OutputMemoryStream & packet)
 {
 	packet << hitPoints;
-	packet << uiPUWeapon->sprite->texture;
-	packet << uiPUWeapon->sprite->color;
-	packet << uiPUBomb->sprite->texture;
-	packet << uiPUBomb->sprite->color;
-	packet << uiPUSpeed->sprite->texture;
-	packet << uiPUSpeed->sprite->color;
+	packet << uiPUWeapon->sprite->texture->id;
+	packet << uiPUWeapon->sprite->color.r;
+	packet << uiPUWeapon->sprite->color.g;
+	packet << uiPUWeapon->sprite->color.b;
+	packet << uiPUWeapon->sprite->color.a;
+
+	packet << uiPUBomb->sprite->texture->id;
+	packet << uiPUBomb->sprite->color.r;
+	packet << uiPUBomb->sprite->color.g;
+	packet << uiPUBomb->sprite->color.b;
+	packet << uiPUBomb->sprite->color.a;
+
+	packet << uiPUSpeed->sprite->texture->id;
+	packet << uiPUSpeed->sprite->color.r;
+	packet << uiPUSpeed->sprite->color.g;
+	packet << uiPUSpeed->sprite->color.b;
+	packet << uiPUSpeed->sprite->color.a;
+
 }
 
 void Spaceship::read(const InputMemoryStream & packet)
 {
 	packet >> hitPoints;
-	packet >> uiPUWeapon->sprite->texture;
-	packet >> uiPUWeapon->sprite->color;
-	packet >> uiPUBomb->sprite->texture;
-	packet >> uiPUBomb->sprite->color;
-	packet >> uiPUSpeed->sprite->texture;
-	packet >> uiPUSpeed->sprite->color;
+	packet >> uiPUWeapon->sprite->texture->id;
+	packet >> uiPUWeapon->sprite->color.r;
+	packet >> uiPUWeapon->sprite->color.g;
+	packet >> uiPUWeapon->sprite->color.b;
+	packet >> uiPUWeapon->sprite->color.a;
+
+	packet >> uiPUBomb->sprite->texture->id;
+	packet >> uiPUBomb->sprite->color.r;
+	packet >> uiPUBomb->sprite->color.g;
+	packet >> uiPUBomb->sprite->color.b;
+	packet >> uiPUBomb->sprite->color.a;
+
+	packet >> uiPUSpeed->sprite->texture->id;
+	packet >> uiPUSpeed->sprite->color.r;
+	packet >> uiPUSpeed->sprite->color.g;
+	packet >> uiPUSpeed->sprite->color.b;
+	packet >> uiPUSpeed->sprite->color.a;
 }
 
 void PowerUp::start()
