@@ -33,10 +33,17 @@ void ReplicationManagerClient::read(const InputMemoryStream& packet)
 			packet >> gameObject->position.y;
 			packet >> gameObject->angle;
 			
+			
+
 			if (repAction == ReplicationAction::Create)
 			{
 				int bType;
 				packet >> bType;
+
+				if ((BehaviourType)bType == BehaviourType::Laser)
+				{
+					App->modSound->playAudioClip(App->modResources->audioClipLaser);
+				}
 
 				gameObject->behaviour = App->modBehaviour->addBehaviour((BehaviourType)bType, gameObject);
 
@@ -56,7 +63,29 @@ void ReplicationManagerClient::read(const InputMemoryStream& packet)
 					gameObject->sprite->texture = nullptr;
 				else
 					gameObject->sprite->texture = App->modTextures->GetTextureByName(name);
+
+				int clipID;
+				packet >> clipID;
+				if (clipID == 0)
+				{
+					gameObject->animation = App->modRender->addAnimation(gameObject);
+					if (gameObject->animation != nullptr)
+					{
+						gameObject->animation->clip = App->modResources->explosionClip;
+						App->modSound->playAudioClip(App->modResources->audioClipExplosion);
+					}
+				}
 			}
+
+			if (repAction == ReplicationAction::Update)
+			{
+				if (gameObject->behaviour != nullptr)
+				{
+					if (gameObject->behaviour->type() == BehaviourType::Spaceship)
+						gameObject->behaviour->read(packet);
+				}
+			}
+
 		}
 		else
 		{

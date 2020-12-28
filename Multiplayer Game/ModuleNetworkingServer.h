@@ -51,6 +51,7 @@ private:
 		std::string name;
 		GameObject *gameObject = nullptr;
 
+		DeliveryManager devManager;
 		// TODO(you): UDP virtual connection lab session
 		ReplicationManagerServer repManagerServer;
 		// TODO(you): Reliability on top of UDP lab session
