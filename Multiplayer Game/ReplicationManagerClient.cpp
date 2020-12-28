@@ -32,7 +32,8 @@ void ReplicationManagerClient::read(const InputMemoryStream& packet)
 			packet >> gameObject->position.x;
 			packet >> gameObject->position.y;
 			packet >> gameObject->angle;
-			
+			packet >> gameObject->size.x;
+			packet >> gameObject->size.y;
 			
 
 			if (repAction == ReplicationAction::Create)
@@ -47,9 +48,7 @@ void ReplicationManagerClient::read(const InputMemoryStream& packet)
 
 				gameObject->behaviour = App->modBehaviour->addBehaviour((BehaviourType)bType, gameObject);
 
-				//object size
-				packet >> gameObject->size.x;
-				packet >> gameObject->size.y;
+
 
 				//sprite
 				gameObject->sprite = App->modRender->addSprite(gameObject);
@@ -82,6 +81,8 @@ void ReplicationManagerClient::read(const InputMemoryStream& packet)
 				if (gameObject->behaviour != nullptr)
 				{
 					if (gameObject->behaviour->type() == BehaviourType::Spaceship)
+						gameObject->behaviour->read(packet);
+					if (gameObject->behaviour->type() == BehaviourType::Bomb)
 						gameObject->behaviour->read(packet);
 				}
 			}

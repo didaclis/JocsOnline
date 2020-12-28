@@ -70,6 +70,7 @@ enum RIFFCode
 
 bool ModuleSound::init()
 {
+
 	// Init DirectSound
 	HMODULE DSoundLibrary = LoadLibraryA("dsound.dll");
 	if (DSoundLibrary)

@@ -40,6 +40,8 @@ void ReplicationManagerServer::write(OutputMemoryStream& packet)
 		packet << gameObject->position.x;
 		packet << gameObject->position.y;
 		packet << gameObject->angle;
+		packet << gameObject->size.x;
+		packet << gameObject->size.y;
 
 		if ((*iter).second == ReplicationAction::Create)
 		{
@@ -47,8 +49,6 @@ void ReplicationManagerServer::write(OutputMemoryStream& packet)
 				packet << (int)gameObject->behaviour->type();
 			else
 				packet << 0;
-			packet << gameObject->size.x;
-			packet << gameObject->size.y;
 			if (gameObject->sprite != nullptr && gameObject->sprite->texture != nullptr)
 			{
 				std::string name = gameObject->sprite->texture->filename;
@@ -69,9 +69,12 @@ void ReplicationManagerServer::write(OutputMemoryStream& packet)
 		if ((*iter).second == ReplicationAction::Update)
 		{
 			if (gameObject->behaviour != nullptr)
+			{
 				if (gameObject->behaviour->type() == BehaviourType::Spaceship)
 					gameObject->behaviour->write(packet);
-
+				if (gameObject->behaviour->type() == BehaviourType::Bomb)
+					gameObject->behaviour->write(packet);
+			}	
 		}
 
 		(*iter).second = ReplicationAction::None;
