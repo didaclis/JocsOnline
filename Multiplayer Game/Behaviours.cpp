@@ -355,46 +355,82 @@ void Spaceship::lookForPowerUp(PowerUp::PowerUpType type)
 void Spaceship::write(OutputMemoryStream & packet)
 {
 	packet << hitPoints;
-	/*packet << uiPUWeapon->sprite->texture->id;
+	if (uiPUWeapon->sprite->texture != nullptr)
+	{
+		packet << uiPUWeapon->sprite->texture->id;
+	}
+	else
+		packet << -1;
+
 	packet << uiPUWeapon->sprite->color.r;
 	packet << uiPUWeapon->sprite->color.g;
 	packet << uiPUWeapon->sprite->color.b;
 	packet << uiPUWeapon->sprite->color.a;
 
-	packet << uiPUBomb->sprite->texture->id;
+	if (uiPUBomb->sprite->texture != nullptr)
+	{
+		packet << uiPUBomb->sprite->texture->id;
+	}
+	else
+		packet << -1;
+
 	packet << uiPUBomb->sprite->color.r;
 	packet << uiPUBomb->sprite->color.g;
 	packet << uiPUBomb->sprite->color.b;
 	packet << uiPUBomb->sprite->color.a;
 
-	packet << uiPUSpeed->sprite->texture->id;
+	if (uiPUSpeed->sprite->texture != nullptr)
+	{
+		packet << uiPUSpeed->sprite->texture->id;
+	}
+	else
+		packet << -1;
+
 	packet << uiPUSpeed->sprite->color.r;
 	packet << uiPUSpeed->sprite->color.g;
 	packet << uiPUSpeed->sprite->color.b;
-	packet << uiPUSpeed->sprite->color.a;*/
+	packet << uiPUSpeed->sprite->color.a;
 }
 
 void Spaceship::read(const InputMemoryStream & packet)
 {
-
 	packet >> hitPoints;
-	/*packet >> uiPUWeapon->sprite->texture->id;
+
+	int weaponId;
+	packet >> weaponId;
+	if (weaponId == -1)
+		uiPUWeapon->sprite->texture = nullptr;
+	else
+		uiPUWeapon->sprite->texture = App->modResources->powerupWeapon;
+
 	packet >> uiPUWeapon->sprite->color.r;
 	packet >> uiPUWeapon->sprite->color.g;
 	packet >> uiPUWeapon->sprite->color.b;
 	packet >> uiPUWeapon->sprite->color.a;
 
-	packet >> uiPUBomb->sprite->texture->id;
+	int bombId;
+	packet >> bombId;
+	if (bombId == -1)
+		uiPUBomb->sprite->texture = nullptr;
+	else
+		uiPUBomb->sprite->texture = App->modResources->powerupBomb;
+
 	packet >> uiPUBomb->sprite->color.r;
 	packet >> uiPUBomb->sprite->color.g;
 	packet >> uiPUBomb->sprite->color.b;
 	packet >> uiPUBomb->sprite->color.a;
 
-	packet >> uiPUSpeed->sprite->texture->id;
+	int speedId;
+	packet >> speedId;
+	if (speedId == -1)
+		uiPUSpeed->sprite->texture = nullptr;
+	else
+		uiPUSpeed->sprite->texture = App->modResources->powerup01;
+
 	packet >> uiPUSpeed->sprite->color.r;
 	packet >> uiPUSpeed->sprite->color.g;
 	packet >> uiPUSpeed->sprite->color.b;
-	packet >> uiPUSpeed->sprite->color.a;*/
+	packet >> uiPUSpeed->sprite->color.a;
 }
 
 void PowerUp::start()
