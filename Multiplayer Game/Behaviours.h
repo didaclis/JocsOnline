@@ -137,6 +137,7 @@ struct Spaceship : public Behaviour
 	GameObject* uiPUSpeed = nullptr;
 	GameObject* uiPUWeapon = nullptr;
 	GameObject* uiPUBomb = nullptr;
+	GameObject* uiBegin = nullptr;
 	std::map<PowerUp::PowerUpType, double> currentPowerUps;
 
 	BehaviourType type() const override { return BehaviourType::Spaceship; }

@@ -52,6 +52,7 @@ void Spaceship::start()
 	uiPUBomb->sprite = App->modRender->addSprite(uiPUBomb);
 	uiPUBomb->sprite->color = vec4{1.0f,1.0f, 1.0f, 0.0f};
 	uiPUBomb->size = { 40,40 };
+	
 }
 
 void Spaceship::onInput(const InputController &input)
