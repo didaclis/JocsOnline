@@ -160,6 +160,7 @@ void ModuleNetworkingServer::onPacketReceived(const InputMemoryStream &packet, c
 				OutputMemoryStream packet;
 				packet << PROTOCOL_ID;
 				packet << ClientMessage::Input;
+
 				proxy->devManager.writeSequenceNumber(packet);
 				proxy->repManagerServer.write(packet);
 				sendPacket(packet, fromAddress);
@@ -181,6 +182,11 @@ void ModuleNetworkingServer::onPacketReceived(const InputMemoryStream &packet, c
 			// Process the input packet and update the corresponding game object
 			if (proxy != nullptr && IsValid(proxy->gameObject))
 			{
+				if (areMoreThanOne() && !begin)
+				{
+					dynamic_cast<Spaceship*>(proxy->gameObject->behaviour)->uiBegin->sprite->color = vec4{ 1.0f,1.0f, 1.0f, 1.0f };
+					proxy->repManagerServer.update(proxy->gameObject->networkId);
+				}
 				// TODO(you): Reliability on top of UDP lab session
 				if (proxy->devManager.processSequenceNumber(packet))
 				{
@@ -199,7 +205,11 @@ void ModuleNetworkingServer::onPacketReceived(const InputMemoryStream &packet, c
 								proxy->gamepad.verticalAxis = inputData.verticalAxis;
 								unpackInputControllerButtons(inputData.buttonBits, proxy->gamepad);
 								if (areMoreThanOne() && proxy->gamepad.start == ButtonState::Pressed)
+								{
 									begin = true;
+									dynamic_cast<Spaceship*>(proxy->gameObject->behaviour)->uiBegin->sprite->color = vec4{ 1.0f,1.0f, 1.0f, 0.0f };
+									proxy->repManagerServer.update(proxy->gameObject->networkId);
+								}
 								if(begin)
 									proxy->gameObject->behaviour->onInput(proxy->gamepad);
 								proxy->nextExpectedInputSequenceNumber = inputData.sequenceNumber + 1;

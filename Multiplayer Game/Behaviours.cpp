@@ -42,17 +42,24 @@ void Spaceship::start()
 
 	uiPUSpeed = Instantiate();
 	uiPUSpeed->sprite = App->modRender->addSprite(uiPUSpeed);
+	uiPUSpeed->sprite->texture = App->modResources->powerup01;
 	uiPUSpeed->sprite->color = vec4{ 1.0f,1.0f, 1.0f, 0.0f };
 	uiPUSpeed->size = { 40,40 };
 	uiPUWeapon = Instantiate();
 	uiPUWeapon->sprite = App->modRender->addSprite(uiPUWeapon);
+	uiPUWeapon->sprite->texture = App->modResources->powerupWeapon;
 	uiPUWeapon->sprite->color = vec4{ 1.0f,1.0f, 1.0f, 0.0f };
 	uiPUWeapon->size = { 40,40 };
 	uiPUBomb = Instantiate();
 	uiPUBomb->sprite = App->modRender->addSprite(uiPUBomb);
+	uiPUBomb->sprite->texture = App->modResources->powerupBomb;
 	uiPUBomb->sprite->color = vec4{1.0f,1.0f, 1.0f, 0.0f};
 	uiPUBomb->size = { 40,40 };
-	
+	uiBegin = Instantiate();
+	uiBegin->sprite = App->modRender->addSprite(uiBegin);
+	uiBegin->sprite->texture = App->modResources->beginText;
+	uiBegin->sprite->color = vec4{ 1.0f,1.0f, 1.0f, 0.0f };
+	uiBegin->sprite->order = 10;
 }
 
 void Spaceship::onInput(const InputController &input)
@@ -122,9 +129,9 @@ void Spaceship::update()
 	uiPUWeapon->position = gameObject->position + vec2{ -20.0f, -80.0f };
 	uiPUBomb->position = gameObject->position + vec2{ 20.0f, -80.0f };
 	uiPUSpeed->position = gameObject->position + vec2{ 60.0f, -80.0f };
+	uiBegin->position = gameObject->position;
 
-
-
+	
 	if (bombing)
 		manageBombs();
 
@@ -338,13 +345,11 @@ void Spaceship::updateCurrentPowerUps()
 			{
 			case PowerUp::PowerUpType::SPEED:
 				advanceSpeed = 400;
-				uiPUSpeed->sprite->texture = nullptr;
 				uiPUSpeed->sprite->color = vec4{ 1.0f,1.0f, 1.0f, 0.0f };
 				NetworkUpdate(gameObject);
 				break;
 			case PowerUp::PowerUpType::BOMB:
 				bombing = false;
-				uiPUBomb->sprite->texture = nullptr;
 				uiPUBomb->sprite->color = vec4{ 1.0f,1.0f, 1.0f, 0.0f };
 				NetworkUpdate(gameObject);
 				break;
@@ -377,82 +382,51 @@ void Spaceship::lookForPowerUp(PowerUp::PowerUpType type)
 void Spaceship::write(OutputMemoryStream & packet)
 {
 	packet << hitPoints;
-	if (uiPUWeapon->sprite->texture != nullptr)
-	{
-		packet << uiPUWeapon->sprite->texture->id;
-	}
-	else
-		packet << -1;
 
 	packet << uiPUWeapon->sprite->color.r;
 	packet << uiPUWeapon->sprite->color.g;
 	packet << uiPUWeapon->sprite->color.b;
 	packet << uiPUWeapon->sprite->color.a;
 
-	if (uiPUBomb->sprite->texture != nullptr)
-	{
-		packet << uiPUBomb->sprite->texture->id;
-	}
-	else
-		packet << -1;
-
 	packet << uiPUBomb->sprite->color.r;
 	packet << uiPUBomb->sprite->color.g;
 	packet << uiPUBomb->sprite->color.b;
 	packet << uiPUBomb->sprite->color.a;
 
-	if (uiPUSpeed->sprite->texture != nullptr)
-	{
-		packet << uiPUSpeed->sprite->texture->id;
-	}
-	else
-		packet << -1;
-
 	packet << uiPUSpeed->sprite->color.r;
 	packet << uiPUSpeed->sprite->color.g;
 	packet << uiPUSpeed->sprite->color.b;
 	packet << uiPUSpeed->sprite->color.a;
+
+	packet << uiBegin->sprite->color.r;
+	packet << uiBegin->sprite->color.g;
+	packet << uiBegin->sprite->color.b;
+	packet << uiBegin->sprite->color.a;
 }
 
 void Spaceship::read(const InputMemoryStream & packet)
 {
 	packet >> hitPoints;
 
-	int weaponId;
-	packet >> weaponId;
-	if (weaponId == -1)
-		uiPUWeapon->sprite->texture = nullptr;
-	else
-		uiPUWeapon->sprite->texture = App->modResources->powerupWeapon;
-
 	packet >> uiPUWeapon->sprite->color.r;
 	packet >> uiPUWeapon->sprite->color.g;
 	packet >> uiPUWeapon->sprite->color.b;
 	packet >> uiPUWeapon->sprite->color.a;
-
-	int bombId;
-	packet >> bombId;
-	if (bombId == -1)
-		uiPUBomb->sprite->texture = nullptr;
-	else
-		uiPUBomb->sprite->texture = App->modResources->powerupBomb;
 
 	packet >> uiPUBomb->sprite->color.r;
 	packet >> uiPUBomb->sprite->color.g;
 	packet >> uiPUBomb->sprite->color.b;
 	packet >> uiPUBomb->sprite->color.a;
 
-	int speedId;
-	packet >> speedId;
-	if (speedId == -1)
-		uiPUSpeed->sprite->texture = nullptr;
-	else
-		uiPUSpeed->sprite->texture = App->modResources->powerup01;
-
 	packet >> uiPUSpeed->sprite->color.r;
 	packet >> uiPUSpeed->sprite->color.g;
 	packet >> uiPUSpeed->sprite->color.b;
 	packet >> uiPUSpeed->sprite->color.a;
+
+	packet >> uiBegin->sprite->color.r;
+	packet >> uiBegin->sprite->color.g;
+	packet >> uiBegin->sprite->color.b;
+	packet >> uiBegin->sprite->color.a;
 }
 
 void PowerUp::start()
@@ -476,18 +450,15 @@ void PowerUp::managePowerUp(GameObject *gO)
 	{
 	case PowerUpType::WEAPON:
 		dynamic_cast<Spaceship*>(gO->behaviour)->currentLaser = Laser::LaserType::BIG;
-		dynamic_cast<Spaceship*>(gO->behaviour)->uiPUWeapon->sprite->texture = App->modResources->powerupWeapon;
 		dynamic_cast<Spaceship*>(gO->behaviour)->uiPUWeapon->sprite->color = vec4{ 1.0f,1.0f, 1.0f, 1.0f };
 		break;
 	case PowerUpType::BOMB:
 		dynamic_cast<Spaceship*>(gO->behaviour)->bombing = true;
 		dynamic_cast<Spaceship*>(gO->behaviour)->timer = Time.time;
-		dynamic_cast<Spaceship*>(gO->behaviour)->uiPUBomb->sprite->texture = App->modResources->powerupBomb;
 		dynamic_cast<Spaceship*>(gO->behaviour)->uiPUBomb->sprite->color = vec4{ 1.0f,1.0f, 1.0f, 1.0f };
 		break;
 	case PowerUpType::SPEED:
 		dynamic_cast<Spaceship*>(gO->behaviour)->advanceSpeed = 800;
-		dynamic_cast<Spaceship*>(gO->behaviour)->uiPUSpeed->sprite->texture = App->modResources->powerup01;
 		dynamic_cast<Spaceship*>(gO->behaviour)->uiPUSpeed->sprite->color = vec4{ 1.0f,1.0f, 1.0f, 1.0f };
 		break;
 	}
