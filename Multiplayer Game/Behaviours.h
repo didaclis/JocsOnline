@@ -132,7 +132,6 @@ struct Spaceship : public Behaviour
 	uint16 hitPoints = MAX_HIT_POINTS;
 	float advanceSpeed = 400.0f;
 	bool bombing = false;
-	bool fTime = true;
 	float timer = 0.0f;
 	GameObject *lifebar = nullptr;
 	GameObject* uiPUSpeed = nullptr;

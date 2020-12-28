@@ -150,9 +150,9 @@ void Spaceship::onCollisionTriggered(Collider &c1, Collider &c2)
 			if (hitPoints > 0)
 			{
 				if(dynamic_cast<Laser*>(c2.gameObject->behaviour)->l_type == Laser::LaserType::BIG)
-					hitPoints -= 50;
+					hitPoints > 50 ? hitPoints -= 50: hitPoints = 0;
 				else
-					hitPoints -= 30;
+					hitPoints > 30 ? hitPoints -= 30 : hitPoints = 0;
 
 				NetworkUpdate(gameObject);
 			}
@@ -207,17 +207,38 @@ void Spaceship::onCollisionTriggered(Collider &c1, Collider &c2)
 
 			if (hitPoints > 0)
 			{
-				hitPoints -= 10;
+				hitPoints > 10 ? hitPoints -= 10 : hitPoints = 0;
 				NetworkUpdate(gameObject);
 			}
+			float size = 30 + 50.0f * Random.next();
+			vec2 position = gameObject->position + 50.0f * vec2{ Random.next() - 0.5f, Random.next() - 0.5f };
+
 			if (hitPoints <= 0)
 			{
 				// Centered big explosion
-				//size = 250.0f + 100.0f * Random.next();
-				//position = gameObject->position;
+				size = 250.0f + 100.0f * Random.next();
+				position = gameObject->position;
 
 				NetworkDestroy(gameObject);
 			}
+
+			GameObject* explosion = NetworkInstantiate();
+			explosion->position = position;
+			explosion->size = vec2{ size, size };
+			explosion->angle = 365.0f * Random.next();
+
+			explosion->sprite = App->modRender->addSprite(explosion);
+			explosion->sprite->texture = App->modResources->explosion1;
+			explosion->sprite->order = 100;
+
+			explosion->animation = App->modRender->addAnimation(explosion);
+			explosion->animation->clip = App->modResources->explosionClip;
+
+			NetworkDestroy(explosion, 2.0f);
+
+			// NOTE(jesus): Only played in the server right now...
+			// You need to somehow make this happen in clients
+			//App->modSound->playAudioClip(App->modResources->audioClipExplosion);
 		}
 	}
 
@@ -228,39 +249,39 @@ void Spaceship::onCollisionTriggered(Collider &c1, Collider &c2)
 			NetworkDestroy(c2.gameObject);
 			if (hitPoints > 0)
 			{
-				hitPoints -= 10;
+				hitPoints > 10 ? hitPoints -= 10 : hitPoints = 0;
 				NetworkUpdate(gameObject);
 			}
 
-			//float size = 30 + 50.0f * Random.next();
-			//vec2 position = gameObject->position + 50.0f * vec2{ Random.next() - 0.5f, Random.next() - 0.5f };
+			float size = 30 + 50.0f * Random.next();
+			vec2 position = gameObject->position + 50.0f * vec2{ Random.next() - 0.5f, Random.next() - 0.5f };
 
-			//if (hitPoints <= 0)
-			//{
-			//	// Centered big explosion
-			//	size = 250.0f + 100.0f * Random.next();
-			//	position = gameObject->position;
+			if (hitPoints <= 0)
+			{
+				// Centered big explosion
+				size = 250.0f + 100.0f * Random.next();
+				position = gameObject->position;
 
-			//	NetworkDestroy(gameObject);
-			//}
+				NetworkDestroy(gameObject);
+			}
 
-			//GameObject* explosion = NetworkInstantiate();
-			//explosion->position = position;
-			//explosion->size = vec2{ size, size };
-			//explosion->angle = 365.0f * Random.next();
+			GameObject* explosion = NetworkInstantiate();
+			explosion->position = position;
+			explosion->size = vec2{ size, size };
+			explosion->angle = 365.0f * Random.next();
 
-			//explosion->sprite = App->modRender->addSprite(explosion);
-			//explosion->sprite->texture = App->modResources->explosion1;
-			//explosion->sprite->order = 100;
+			explosion->sprite = App->modRender->addSprite(explosion);
+			explosion->sprite->texture = App->modResources->explosion1;
+			explosion->sprite->order = 100;
 
-			//explosion->animation = App->modRender->addAnimation(explosion);
-			//explosion->animation->clip = App->modResources->explosionClip;
+			explosion->animation = App->modRender->addAnimation(explosion);
+			explosion->animation->clip = App->modResources->explosionClip;
 
-			//NetworkDestroy(explosion, 2.0f);
+			NetworkDestroy(explosion, 2.0f);
 
 			// NOTE(jesus): Only played in the server right now...
 			// You need to somehow make this happen in clients
-			App->modSound->playAudioClip(App->modResources->audioClipExplosion);
+			//App->modSound->playAudioClip(App->modResources->audioClipExplosion);
 		}
 	}
 }

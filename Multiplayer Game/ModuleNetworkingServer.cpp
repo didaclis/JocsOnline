@@ -189,7 +189,10 @@ void ModuleNetworkingServer::onPacketReceived(const InputMemoryStream &packet, c
 								proxy->gamepad.horizontalAxis = inputData.horizontalAxis;
 								proxy->gamepad.verticalAxis = inputData.verticalAxis;
 								unpackInputControllerButtons(inputData.buttonBits, proxy->gamepad);
-								proxy->gameObject->behaviour->onInput(proxy->gamepad);
+								if (areMoreThanOne() && proxy->gamepad.start == ButtonState::Pressed)
+									begin = true;
+								if(begin)
+									proxy->gameObject->behaviour->onInput(proxy->gamepad);
 								proxy->nextExpectedInputSequenceNumber = inputData.sequenceNumber + 1;
 							}
 					}
@@ -228,7 +231,7 @@ void ModuleNetworkingServer::onUpdate()
 				}
 			}
 		}
-		if (areMoreThanOne())//Prevent the game to start with only 1 player
+		if (begin)//Prevent the game to start with only 1 player
 			manageGame();
 
 		for (ClientProxy &clientProxy : clientProxies)
