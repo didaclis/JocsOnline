@@ -149,7 +149,11 @@ void Spaceship::onCollisionTriggered(Collider &c1, Collider &c2)
 		
 			if (hitPoints > 0)
 			{
-				hitPoints--;
+				if(dynamic_cast<Laser*>(c2.gameObject->behaviour)->l_type == Laser::LaserType::BIG)
+					hitPoints -= 50;
+				else
+					hitPoints -= 30;
+
 				NetworkUpdate(gameObject);
 			}
 
@@ -203,7 +207,7 @@ void Spaceship::onCollisionTriggered(Collider &c1, Collider &c2)
 
 			if (hitPoints > 0)
 			{
-				hitPoints--;
+				hitPoints -= 10;
 				NetworkUpdate(gameObject);
 			}
 			if (hitPoints <= 0)
@@ -224,7 +228,7 @@ void Spaceship::onCollisionTriggered(Collider &c1, Collider &c2)
 			NetworkDestroy(c2.gameObject);
 			if (hitPoints > 0)
 			{
-				hitPoints--;
+				hitPoints -= 10;
 				NetworkUpdate(gameObject);
 			}
 
