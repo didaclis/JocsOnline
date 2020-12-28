@@ -98,6 +98,15 @@ void ModuleNetworkingServer::onPacketReceived(const InputMemoryStream &packet, c
 
 		if (message == ClientMessage::Hello)
 		{
+			if (begin)
+			{
+				OutputMemoryStream unwelcomePacket;
+				unwelcomePacket << PROTOCOL_ID;
+				unwelcomePacket << ServerMessage::Unwelcome;
+				sendPacket(unwelcomePacket, fromAddress);
+
+				WLOG("Message received: UNWELCOMED hello - game started");
+			}
 			if (proxy == nullptr)
 			{
 				proxy = createClientProxy();
@@ -231,8 +240,18 @@ void ModuleNetworkingServer::onUpdate()
 				}
 			}
 		}
-		if (begin)//Prevent the game to start with only 1 player
-			manageGame();
+		if (begin)
+		{
+			if (!areMoreThanOne())
+			{
+				begin = false;
+			}
+			else
+			{
+				//Prevent the game to start with only 1 player
+				manageGame();
+			}
+		}
 
 		for (ClientProxy &clientProxy : clientProxies)
 		{
