@@ -166,6 +166,13 @@ void ModuleNetworkingServer::onPacketReceived(const InputMemoryStream &packet, c
 				sendPacket(packet, fromAddress);
 
 				LOG("Message received: hello - from player %s", proxy->name.c_str());
+
+				if (areMoreThanOne() && !begin && enterToStart == nullptr)
+				{
+					enterToStart = NetworkInstantiate();
+					enterToStart->sprite = App->modRender->addSprite(enterToStart);
+					enterToStart->sprite->texture = App->modResources->beginText;
+				}
 			}
 			else
 			{
@@ -182,11 +189,6 @@ void ModuleNetworkingServer::onPacketReceived(const InputMemoryStream &packet, c
 			// Process the input packet and update the corresponding game object
 			if (proxy != nullptr && IsValid(proxy->gameObject))
 			{
-				if (areMoreThanOne() && !begin)
-				{
-					dynamic_cast<Spaceship*>(proxy->gameObject->behaviour)->uiBegin->sprite->color = vec4{ 1.0f,1.0f, 1.0f, 1.0f };
-					proxy->repManagerServer.update(proxy->gameObject->networkId);
-				}
 				// TODO(you): Reliability on top of UDP lab session
 				if (proxy->devManager.processSequenceNumber(packet))
 				{
@@ -209,6 +211,12 @@ void ModuleNetworkingServer::onPacketReceived(const InputMemoryStream &packet, c
 									begin = true;
 									dynamic_cast<Spaceship*>(proxy->gameObject->behaviour)->uiBegin->sprite->color = vec4{ 1.0f,1.0f, 1.0f, 0.0f };
 									proxy->repManagerServer.update(proxy->gameObject->networkId);
+
+									if (enterToStart != nullptr)
+									{
+										NetworkDestroy(enterToStart);
+										enterToStart = nullptr;
+									}
 								}
 								if(begin)
 									proxy->gameObject->behaviour->onInput(proxy->gamepad);
@@ -260,6 +268,12 @@ void ModuleNetworkingServer::onUpdate()
 			{
 				//Prevent the game to start with only 1 player
 				manageGame();
+			}
+			if (areMoreThanOne() && enterToStart == nullptr && begin == false)
+			{
+				enterToStart = NetworkInstantiate();
+				enterToStart->sprite = App->modRender->addSprite(enterToStart);
+				enterToStart->sprite->texture = App->modResources->beginText;
 			}
 		}
 
