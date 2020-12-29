@@ -149,9 +149,6 @@ void ModuleNetworkingServer::onPacketReceived(const InputMemoryStream &packet, c
 					proxy->repManagerServer.create(gameObject->networkId);
 				}
 				OutputMemoryStream packet;
-				packet << PROTOCOL_ID;
-				packet << ClientMessage::Input;
-				proxy->devManager.writeSequenceNumber(packet);
 				proxy->repManagerServer.write(packet);
 				sendPacket(packet, fromAddress);
 
@@ -173,38 +170,33 @@ void ModuleNetworkingServer::onPacketReceived(const InputMemoryStream &packet, c
 			if (proxy != nullptr && IsValid(proxy->gameObject))
 			{
 				// TODO(you): Reliability on top of UDP lab session
-				if (proxy->devManager.processSequenceNumber(packet))
-				{
-					// Read input data
-					while (packet.RemainingByteCount() > 0)
-					{
-						InputPacketData inputData;
-							packet >> inputData.sequenceNumber;
-							packet >> inputData.horizontalAxis;
-							packet >> inputData.verticalAxis;
-							packet >> inputData.buttonBits;
 
-							if (inputData.sequenceNumber >= proxy->nextExpectedInputSequenceNumber)
-							{
-								proxy->gamepad.horizontalAxis = inputData.horizontalAxis;
-								proxy->gamepad.verticalAxis = inputData.verticalAxis;
-								unpackInputControllerButtons(inputData.buttonBits, proxy->gamepad);
-								proxy->gameObject->behaviour->onInput(proxy->gamepad);
-								proxy->nextExpectedInputSequenceNumber = inputData.sequenceNumber + 1;
-							}
+				// Read input data
+				while (packet.RemainingByteCount() > 0)
+				{
+					InputPacketData inputData;
+					packet >> inputData.sequenceNumber;
+					packet >> inputData.horizontalAxis;
+					packet >> inputData.verticalAxis;
+					packet >> inputData.buttonBits;
+
+					if (inputData.sequenceNumber >= proxy->nextExpectedInputSequenceNumber)
+					{
+						proxy->gamepad.horizontalAxis = inputData.horizontalAxis;
+						proxy->gamepad.verticalAxis = inputData.verticalAxis;
+						unpackInputControllerButtons(inputData.buttonBits, proxy->gamepad);
+						proxy->gameObject->behaviour->onInput(proxy->gamepad);
+						proxy->nextExpectedInputSequenceNumber = inputData.sequenceNumber + 1;
 					}
 				}
 			}
+
 			//send last sequence number recived
 			OutputMemoryStream inputNumberPacket;
 			inputNumberPacket << PROTOCOL_ID;
 			inputNumberPacket << ClientMessage::InputNumber;
 			inputNumberPacket << proxy->nextExpectedInputSequenceNumber;
 			sendPacket(inputNumberPacket, fromAddress);
-		}
-		else if (message == ClientMessage::ConfirmPackets)
-		{
-		proxy->devManager.processAckdSequenceNumbers(packet);
 		}
 
 		// TODO(you): UDP virtual connection lab session
@@ -246,20 +238,8 @@ void ModuleNetworkingServer::onUpdate()
 
 				// TODO(you): World state replication lab session
 				OutputMemoryStream packet;
-				packet << PROTOCOL_ID;
-				packet << ClientMessage::Input;
-				Delivery* aux = clientProxy.devManager.writeSequenceNumber(packet);
 				clientProxy.repManagerServer.write(packet);
-
-				aux->savedPacket = packet;
-
-				std::list<OutputMemoryStream> packets;
-				clientProxy.devManager.getAllPackets(packets);
-				for (std::list<OutputMemoryStream>::iterator it = packets.begin(); it != packets.end(); ++it)
-				{
-					sendPacket(*it, clientProxy.address);
-				}
-				//sendPacket(packet, clientProxy.address);
+				sendPacket(packet, clientProxy.address);
 				// TODO(you): Reliability on top of UDP lab session
 			}
 		}

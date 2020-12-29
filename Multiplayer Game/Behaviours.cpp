@@ -368,11 +368,11 @@ void Spaceship::write(OutputMemoryStream & packet)
 	packet << uiPUSpeed->sprite->color.g;
 	packet << uiPUSpeed->sprite->color.b;
 	packet << uiPUSpeed->sprite->color.a;
+
 }
 
 void Spaceship::read(const InputMemoryStream & packet)
 {
-
 	packet >> hitPoints;
 	packet >> uiPUWeapon->sprite->texture->id;
 	packet >> uiPUWeapon->sprite->color.r;

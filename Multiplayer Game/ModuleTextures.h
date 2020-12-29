@@ -32,8 +32,6 @@ public:
 
 	Texture* GetTextureByName(std::string name);
 
-	Texture* GetTextureByID(const int& id);
-
 private:
 
 	ID3D11ShaderResourceView *loadD3DTextureFromFile(const char *filename, int *width, int *height);
