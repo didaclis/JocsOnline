@@ -210,6 +210,8 @@ void ModuleNetworkingClient::onUpdate()
 
 		if (secondsSinceLastInputDelivery >= PING_INTERVAL_SECONDS)
 		{
+			devManager.Clear();
+
 			disconnect();
 		}
 
@@ -250,6 +252,8 @@ void ModuleNetworkingClient::onUpdate()
 		else
 		{
 			// This means that the player has been destroyed (e.g. killed)
+			devManager.Clear();
+
 			disconnect();
 		}
 	}
@@ -257,6 +261,7 @@ void ModuleNetworkingClient::onUpdate()
 
 void ModuleNetworkingClient::onConnectionReset(const sockaddr_in & fromAddress)
 {
+	devManager.Clear();
 	disconnect();
 }
 

@@ -117,11 +117,13 @@ void DeliveryManager::getAllPackets(std::list<OutputMemoryStream>& packets)
 
 void DeliveryManager::Clear()
 {
-    for (std::list<Delivery*>::iterator iter = pendingDeliv.begin(); iter != pendingDeliv.end();)
+    for (std::list<Delivery*>::iterator iter = pendingDeliv.begin(); iter != pendingDeliv.end(); ++iter)
     {
-        delete[] * iter;
-        *iter == nullptr;
+        delete * iter;
+        *iter = nullptr;
     }
+    expectedSeqNum = 0;
+    nextSeqNum = 0;
     pendingDeliv.clear();
     pendingAckNum.clear();
 }

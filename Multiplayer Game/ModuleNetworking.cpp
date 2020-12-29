@@ -10,6 +10,7 @@
 void ModuleNetworking::disconnect()
 {
 	setEnabled(false);
+
 }
 
 
