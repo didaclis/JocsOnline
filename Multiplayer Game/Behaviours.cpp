@@ -351,7 +351,7 @@ void Spaceship::lookForPowerUp(PowerUp::PowerUpType type)
 void Spaceship::write(OutputMemoryStream & packet)
 {
 	packet << hitPoints;
-	/*packet << uiPUWeapon->sprite->texture->id;
+	packet << uiPUWeapon->sprite->texture->id;
 	packet << uiPUWeapon->sprite->color.r;
 	packet << uiPUWeapon->sprite->color.g;
 	packet << uiPUWeapon->sprite->color.b;
@@ -367,14 +367,14 @@ void Spaceship::write(OutputMemoryStream & packet)
 	packet << uiPUSpeed->sprite->color.r;
 	packet << uiPUSpeed->sprite->color.g;
 	packet << uiPUSpeed->sprite->color.b;
-	packet << uiPUSpeed->sprite->color.a;*/
+	packet << uiPUSpeed->sprite->color.a;
 }
 
 void Spaceship::read(const InputMemoryStream & packet)
 {
 
 	packet >> hitPoints;
-	/*packet >> uiPUWeapon->sprite->texture->id;
+	packet >> uiPUWeapon->sprite->texture->id;
 	packet >> uiPUWeapon->sprite->color.r;
 	packet >> uiPUWeapon->sprite->color.g;
 	packet >> uiPUWeapon->sprite->color.b;
@@ -390,7 +390,7 @@ void Spaceship::read(const InputMemoryStream & packet)
 	packet >> uiPUSpeed->sprite->color.r;
 	packet >> uiPUSpeed->sprite->color.g;
 	packet >> uiPUSpeed->sprite->color.b;
-	packet >> uiPUSpeed->sprite->color.a;*/
+	packet >> uiPUSpeed->sprite->color.a;
 }
 
 void PowerUp::start()
