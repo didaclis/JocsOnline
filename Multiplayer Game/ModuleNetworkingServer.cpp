@@ -169,6 +169,11 @@ void ModuleNetworkingServer::onPacketReceived(const InputMemoryStream &packet, c
 
 				if (areMoreThanOne() && !begin && enterToStart == nullptr)
 				{
+					if (youWon != nullptr)
+					{
+						NetworkDestroy(youWon);
+						youWon = nullptr;
+					}
 					enterToStart = NetworkInstantiate();
 					enterToStart->sprite = App->modRender->addSprite(enterToStart);
 					enterToStart->sprite->texture = App->modResources->beginText;
@@ -263,6 +268,10 @@ void ModuleNetworkingServer::onUpdate()
 			if (!areMoreThanOne())
 			{
 				begin = false;
+				
+				youWon = NetworkInstantiate();
+				youWon->sprite = App->modRender->addSprite(youWon);
+				youWon->sprite->texture = App->modResources->winText;
 			}
 			else
 			{

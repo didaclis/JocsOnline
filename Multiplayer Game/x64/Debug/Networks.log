@@ -1,35 +1,35 @@
 ﻿  UnityBuild.cpp
 C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\Behaviours.cpp(313,15): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\Behaviours.cpp(457,56): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\Behaviours.cpp(470,18): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\Behaviours.cpp(525,36): warning C4305: 'inicializando': truncamiento de 'double' a 'float'
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\Behaviours.cpp(460,56): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\Behaviours.cpp(473,18): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\Behaviours.cpp(528,36): warning C4305: 'inicializando': truncamiento de 'double' a 'float'
 C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\DeliveryManager.cpp(69,26): warning C4018: '>=': no coinciden signed/unsigned
 C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\DeliveryManager.cpp(123,15): warning C4553: "==": el resultado de la expresión no se usa. ¿Quiso decir "="?
-C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(409,25): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(410,23): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
-C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(411,9): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
-C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(418,26): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(419,23): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
-C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(420,9): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
-C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(427,36): warning C4838: la conversión de 'double' en 'float' requiere una conversión de restricción
-C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(427,36): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(427,58): warning C4838: la conversión de 'double' en 'float' requiere una conversión de restricción
-C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(427,58): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(503,31): warning C4838: la conversión de 'double' en 'float' requiere una conversión de restricción
-C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(503,31): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(503,53): warning C4838: la conversión de 'double' en 'float' requiere una conversión de restricción
-C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(503,53): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(510,31): warning C4838: la conversión de 'double' en 'float' requiere una conversión de restricción
-C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(510,31): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(510,53): warning C4838: la conversión de 'double' en 'float' requiere una conversión de restricción
-C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(510,53): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(517,31): warning C4838: la conversión de 'double' en 'float' requiere una conversión de restricción
-C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(517,31): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(517,53): warning C4838: la conversión de 'double' en 'float' requiere una conversión de restricción
-C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(517,53): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(524,31): warning C4838: la conversión de 'double' en 'float' requiere una conversión de restricción
-C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(524,31): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
-C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(524,53): warning C4838: la conversión de 'double' en 'float' requiere una conversión de restricción
-C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(524,53): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(432,25): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(433,23): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(434,9): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(441,26): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(442,23): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(443,9): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(450,36): warning C4838: la conversión de 'double' en 'float' requiere una conversión de restricción
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(450,36): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(450,58): warning C4838: la conversión de 'double' en 'float' requiere una conversión de restricción
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(450,58): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(526,31): warning C4838: la conversión de 'double' en 'float' requiere una conversión de restricción
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(526,31): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(526,53): warning C4838: la conversión de 'double' en 'float' requiere una conversión de restricción
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(526,53): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(533,31): warning C4838: la conversión de 'double' en 'float' requiere una conversión de restricción
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(533,31): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(533,53): warning C4838: la conversión de 'double' en 'float' requiere una conversión de restricción
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(533,53): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(540,31): warning C4838: la conversión de 'double' en 'float' requiere una conversión de restricción
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(540,31): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(540,53): warning C4838: la conversión de 'double' en 'float' requiere una conversión de restricción
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(540,53): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(547,31): warning C4838: la conversión de 'double' en 'float' requiere una conversión de restricción
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(547,31): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(547,53): warning C4838: la conversión de 'double' en 'float' requiere una conversión de restricción
+C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ModuleNetworkingServer.cpp(547,53): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
 C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\ScreenGame.cpp(22,31): warning C4305: '=': truncamiento de 'double' a 'float'
   Networks.vcxproj -> C:\Users\Iván\Documents\GitHub\JocsOnline\Multiplayer Game\x64\Debug\Networks.exe

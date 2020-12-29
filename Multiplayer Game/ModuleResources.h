@@ -24,6 +24,7 @@ public:
 	Texture* squareOfDeath = nullptr;
 	Texture* powerupBomb = nullptr;
 	Texture* beginText = nullptr;
+	Texture* winText = nullptr;
 	AnimationClip *explosionClip = nullptr;
 
 	AudioClip *audioClipLaser = nullptr;
@@ -47,7 +48,7 @@ private:
 		void execute() override;
 	};
 
-	static const int MAX_RESOURCES = 17;
+	static const int MAX_RESOURCES = 18;
 	TaskLoadTexture tasks[MAX_RESOURCES] = {};
 	uint32 taskCount = 0;
 	uint32 finishedTaskCount = 0;

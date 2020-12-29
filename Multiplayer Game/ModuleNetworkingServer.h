@@ -86,10 +86,12 @@ public:
 	bool beginSquare = false;
 	GameObject* square = nullptr;
 	bool begin = false;
+	GameObject* enterToStart = nullptr;
+	GameObject* youWon = nullptr;
 	//////////////////////////////////////////////////////////////////////
 	// Spawning network objects
 	//////////////////////////////////////////////////////////////////////
-	GameObject* enterToStart = nullptr;
+
 
 
 	GameObject * spawnPlayer(uint8 spaceshipType, vec2 initialPosition, float initialAngle);

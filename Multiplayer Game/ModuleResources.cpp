@@ -39,7 +39,8 @@ bool ModuleResources::init()
 	loadTextureAsync("bomb.png",			 &bomb);
 	loadTextureAsync("squareOfDeath.png",	 &squareOfDeath);
 	loadTextureAsync("powerupBomb.png",      &powerupBomb);
-	loadTextureAsync("beginText.png", &beginText);
+	loadTextureAsync("beginText.png",		 &beginText);
+	loadTextureAsync("YouWon.png",			 &winText);
 #endif
 
 	audioClipLaser = App->modSound->loadAudioClip("laser.wav");
