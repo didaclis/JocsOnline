@@ -95,6 +95,16 @@ Texture* ModuleTextures::GetTextureByName(std::string name)
 	return nullptr;
 }
 
+Texture* ModuleTextures::GetTextureByID(const int& id)
+{
+	for (int i = 0; i < MAX_TEXTURES; ++i)
+	{
+		if (id == _textures[i].id)
+			return &_textures[i];
+	}
+	return nullptr;
+}
+
 ID3D11ShaderResourceView* ModuleTextures::loadD3DTextureFromFile(const char * filename, int * width, int * height)
 {
 	ID3D11ShaderResourceView *shaderResourceView = nullptr;
