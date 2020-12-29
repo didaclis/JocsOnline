@@ -308,7 +308,7 @@ void Spaceship::onNotCollisionTriggered(Collider& c1, Collider& c2)
 
 void Spaceship::manageBombs()
 {
-	if (Time.time - timer > 2)
+	if (Time.time - timer > 1.5)
 	{
 		timer = Time.time;
 		if (isServer)
